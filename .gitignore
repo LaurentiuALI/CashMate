@@ -8,6 +8,8 @@ target/
 **/src/main/resources/application.properties
 **/src/main/resources/application-mysql.properties
 
+*.properties
+
 ### STS ###
 .apt_generated
 .classpath
