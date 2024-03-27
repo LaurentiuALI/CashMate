@@ -14,6 +14,7 @@ public class Account {
     @Column(name = "name")
     private String name;
 
+    
     @Column(name = "user_id")
     private float user_id;
 

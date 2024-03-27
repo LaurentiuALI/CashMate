@@ -40,7 +40,7 @@ CREATE TABLE transaction (
                              amount double precision not null,
                              date DATETIME not null,
                              recursion_id BIGINT NOT NULL,
-                             type ENUM('EXPENSE', 'INCOME') NOT NULL,
+                             type VARCHAR(5) NOT NULL,
 
                              FOREIGN KEY (recursion_id) REFERENCES recursion(id) ON DELETE CASCADE,
                              FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE
@@ -54,3 +54,5 @@ CREATE TABLE transaction_category (
                                       FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE,
                                       PRIMARY KEY(transaction_id, category_id)
 );
+
+alter table transaction modify column type ENUM('USD', 'EUR', 'GBP');

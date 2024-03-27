@@ -2,6 +2,9 @@ package com.example.CashMate.data;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="user")
 public class User {
@@ -15,6 +18,27 @@ public class User {
 
     @Column(name="password")
     private String password;
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user_id")
+    private List<Account> accounts = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", accounts=" + accounts +
+                '}';
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -40,12 +64,4 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }
