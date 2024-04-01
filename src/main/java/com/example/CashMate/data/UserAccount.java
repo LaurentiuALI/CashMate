@@ -12,12 +12,14 @@ public class UserAccount {
     private UserAccountId id;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @MapsId("user_id")
+    @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @MapsId("account_id")
+    @JoinColumn(name="account_id")
     private Account account;
 
     @Override

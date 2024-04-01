@@ -24,7 +24,7 @@ CREATE TABLE user_account (
 CREATE TABLE category (
                           id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                           name varchar(50) NOT NULL,
-                          DESCRIPTION varchar(255)
+                          description varchar(255)
 );
 
 CREATE TABLE recursion (

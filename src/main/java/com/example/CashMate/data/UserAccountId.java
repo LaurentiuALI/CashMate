@@ -7,8 +7,12 @@ import java.util.Objects;
 
 @Embeddable
 public class UserAccountId implements Serializable {
+
     @Column(name="user_id")
     private long user_id;
+
+    @Column(name="account_id")
+    private long account_id;
 
     public UserAccountId(long user_id, long account_id) {
         this.user_id = user_id;
@@ -46,7 +50,4 @@ public class UserAccountId implements Serializable {
     public int hashCode() {
         return Objects.hash(user_id, account_id);
     }
-
-    @Column(name="account_id")
-    private long account_id;
 }

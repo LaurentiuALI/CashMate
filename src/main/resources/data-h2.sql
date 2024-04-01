@@ -1,5 +1,5 @@
 -- Inserare în tabelul user
-INSERT INTO user (name, password) VALUES
+INSERT INTO users (name, password) VALUES
                                       ('Alice', 'pass1'),
                                       ('Bob', 'pass2'),
                                       ('Charlie', 'pass3'),
