@@ -1,0 +1,36 @@
+# Services and Functionalities
+
+- UserService
+  - Register
+  - Login
+- AccountsService
+  - CreateAccount
+  - AddAccountMember
+  - RemoveAccountMember
+  - RemoveAccount
+  - UpdateAccount
+  - GetAccount
+  - GetAllAccountsByUser
+- TransactionsService
+  - CreateTransaction
+  - UpdateTransaction
+  - RemoveTransaction
+  - CreateRecursion
+  - UpdateRecursion
+  - RemoveRecursion
+  - CreateCategory
+  - UpdateCategory
+  - RemoveCategory
+  - GetTransactionsByID
+  - GetTransactionsByUserID
+  - GetTransactionsByAccountID
+  - GetAllTransactions
+  - GetCategoryByID
+  - GetCategoryByTransactionID
+  - GetAllCategories
+  - GetAllCategoriesByAccountID
+  - GetRecursionByID
+  - GetRecursionByTransactionID
+  - GetRecursionsByAccount
+  - GetRecursionsByUserID
+  - GetAllRecursions
