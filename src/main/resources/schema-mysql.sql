@@ -40,7 +40,7 @@ CREATE TABLE transaction (
                              amount double precision not null,
                              date DATETIME not null,
                              recursion_id BIGINT NOT NULL,
-                             type ENUM("EXPENSE", "INCOME") NOT NULL,
+                             type ENUM('EXPENSE', 'INCOME') NOT NULL,
 
                              FOREIGN KEY (recursion_id) REFERENCES recursion(id) ON DELETE CASCADE,
                              FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE

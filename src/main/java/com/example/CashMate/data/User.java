@@ -9,8 +9,8 @@ import java.util.*;
 public class User {
     @Id
     @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name="name")
     private String name;
@@ -32,7 +32,7 @@ public class User {
         this.id = id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -58,7 +58,6 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
-                ", accounts=" + accounts +
                 '}';
     }
 }

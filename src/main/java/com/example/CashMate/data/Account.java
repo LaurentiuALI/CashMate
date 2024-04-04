@@ -2,6 +2,8 @@ package com.example.CashMate.data;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name="account")
 public class Account {
@@ -9,14 +11,18 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private float id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
 
     
     @Column(name = "user_id")
-    private float user_id;
+    private Long user_id;
+
+    @OneToMany
+    @JoinColumn(name="account_id")
+    private Set<Transaction> transactions;
 
     @Override
     public String toString() {
@@ -27,11 +33,11 @@ public class Account {
                 '}';
     }
 
-    public float getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(float id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,11 +49,11 @@ public class Account {
         this.name = name;
     }
 
-    public float getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(float user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 }

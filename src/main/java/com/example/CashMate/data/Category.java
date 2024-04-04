@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Category {
     @Id
     @Column(name="id")
-    private long id;
+    private Long id;
 
     @Column(name="name")
     private String name;

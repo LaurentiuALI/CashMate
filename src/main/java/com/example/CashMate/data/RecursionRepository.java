@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface CategoryRepository extends CrudRepository<Category, Long> {
-
-    List<Category> findAll();
+public interface RecursionRepository extends CrudRepository<Recursion, Long> {
+    List<Recursion> findAll();
 }

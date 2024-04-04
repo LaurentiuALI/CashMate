@@ -50,4 +50,12 @@ public class UserAccountId implements Serializable {
     public int hashCode() {
         return Objects.hash(user_id, account_id);
     }
+
+    @Override
+    public String toString() {
+        return "UserAccountId{" +
+                "user_id=" + user_id +
+                ", account_id=" + account_id +
+                '}';
+    }
 }

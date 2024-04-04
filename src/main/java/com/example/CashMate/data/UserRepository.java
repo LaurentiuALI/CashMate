@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    @Query("SELECT DISTINCT user FROM User user JOIN FETCH user.accounts acccounts")
+//    @Query("SELECT DISTINCT user FROM User user JOIN FETCH user.accounts acccounts")
     List<User> findAll();
 }
