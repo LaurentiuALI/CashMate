@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppStartupEvent implements ApplicationListener<ApplicationReadyEvent> {
 
-    private final CashUserRepository cashUserRepository;
+    private final CashUserRepository userRepository;
     private final AccountRepository accountRepository;
     private final UserAccountRepository userAccountRepository;
     private final CategoryRepository categoryRepository;
@@ -18,10 +18,10 @@ public class AppStartupEvent implements ApplicationListener<ApplicationReadyEven
 
 
 
-    public AppStartupEvent(CashUserRepository cashUserRepository, AccountRepository accountRepository,
+    public AppStartupEvent(CashUserRepository userRepository, AccountRepository accountRepository,
                            UserAccountRepository userAccountRepository, CategoryRepository categoryRepository,
                            RecursionRepository recursionRepository, TransactionRepository transactionRepository, TransactionCategoryRepostiory transactionCategoryRepostiory) {
-        this.cashUserRepository = cashUserRepository;
+        this.userRepository = userRepository;
         this.accountRepository = accountRepository;
         this.userAccountRepository = userAccountRepository;
         this.categoryRepository = categoryRepository;

@@ -56,4 +56,4 @@ INSERT INTO transaction (account_id, name, description, amount, date, recursion_
 
 -- Inserare în tabelul transaction_category
 INSERT INTO transaction_category (transaction_id, category_id) VALUES
-                                                                   (1, 1), (2, 4), (3, 5), (4, 2), (5, 3), (6, 4), (7, 6);
+                                                                      (1, 1), (2, 4), (3, 5), (4, 2), (5, 3), (6, 4), (7, 6);

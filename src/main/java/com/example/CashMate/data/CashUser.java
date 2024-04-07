@@ -1,6 +1,7 @@
 package com.example.CashMate.data;
 
 import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.*;
 
@@ -18,19 +19,10 @@ public class CashUser {
     @Column(name="password")
     private String password;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private Set<Account> accounts;
 
-    public CashUser(long id, String name, String password, Set<Account> accounts) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.accounts = accounts;
-    }
-
-    public CashUser() {
-    }
 
     public Set<Account> getAccounts() {
         return accounts;
@@ -62,9 +54,35 @@ public class CashUser {
         this.password = password;
     }
 
+    public CashUser(long id, String name, String password, Set<Account> accounts) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.accounts = accounts;
+    }
+
+    public CashUser(String name, String password, Set<Account> accounts) {
+        this.name = name;
+        this.password = password;
+        this.accounts = accounts;
+    }
+
+    public CashUser(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
+    public CashUser(long id, String name, String password) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+    }
+    public CashUser() {
+    }
+
     @Override
     public String toString() {
-        return "User{" +
+        return "cash_user={" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +

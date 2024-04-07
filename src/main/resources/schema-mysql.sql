@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS account (
                                        FOREIGN KEY (user_id) REFERENCES cash_user(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS user_account (
-                                            user_id BIGINT NOT NULL,
-                                            account_id BIGINT NOT NULL,
+CREATE TABLE user_account (
+                              user_id BIGINT NOT NULL,
+                              account_id BIGINT NOT NULL,
 
                                             FOREIGN KEY (user_id) REFERENCES cash_user(id) ON DELETE CASCADE,
                                             FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
