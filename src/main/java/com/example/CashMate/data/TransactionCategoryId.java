@@ -15,6 +15,14 @@ public class TransactionCategoryId implements Serializable {
     @Column(name="category_id")
     private Long category_id;
 
+    public TransactionCategoryId(Long transaction_id, Long category_id) {
+        this.transaction_id = transaction_id;
+        this.category_id = category_id;
+    }
+
+    public TransactionCategoryId() {
+    }
+
     @Override
     public String toString() {
         return "TransactionCategoryId{" +

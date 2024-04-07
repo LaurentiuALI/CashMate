@@ -18,6 +18,16 @@ public class Category {
     @Column(name="name")
     private String name;
 
+    public Category(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Category() {
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

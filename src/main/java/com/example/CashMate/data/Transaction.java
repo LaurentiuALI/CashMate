@@ -15,6 +15,14 @@ public class Transaction {
     @Column(name = "account_id")
     private Long account_id;
 
+    public Transaction(Long id, Long account_id) {
+        this.id = id;
+        this.account_id = account_id;
+    }
+
+    public Transaction() {
+    }
+
     public long getId() {
         return id;
     }
@@ -30,6 +38,7 @@ public class Transaction {
     public void setAccount_id(long account_id) {
         this.account_id = account_id;
     }
+
 
     @Override
     public boolean equals(Object o) {

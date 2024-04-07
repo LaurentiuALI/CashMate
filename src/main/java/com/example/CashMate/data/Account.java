@@ -24,6 +24,16 @@ public class Account {
     @JoinColumn(name="account_id")
     private Set<Transaction> transactions;
 
+    public Account(Long id, String name, Long user_id, Set<Transaction> transactions) {
+        this.id = id;
+        this.name = name;
+        this.user_id = user_id;
+        this.transactions = transactions;
+    }
+
+    public Account() {
+    }
+
     @Override
     public String toString() {
         return "Account{" +

@@ -15,18 +15,31 @@ public class UserAccount {
     @ManyToOne
     @MapsId("user_id")
     @JoinColumn(name="user_id")
-    private User user;
+    private CashUser cashUser;
 
     @ManyToOne
     @MapsId("account_id")
     @JoinColumn(name="account_id")
     private Account account;
 
+    public UserAccount(UserAccountId userAccountId) {
+        this.id = userAccountId;
+    }
+
+    public UserAccount(UserAccountId id, CashUser cashUser, Account account) {
+        this.id = id;
+        this.cashUser = cashUser;
+        this.account = account;
+    }
+
+    public UserAccount() {
+    }
+
     @Override
     public String toString() {
         return "UserAccount{" +
                 "id=" + id +
-                ", user=" + user +
+                ", user=" + cashUser +
                 ", account=" + account +
                 '}';
     }
@@ -36,12 +49,12 @@ public class UserAccount {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserAccount that = (UserAccount) o;
-        return id.equals(that.id) && user.equals(that.user) && account.equals(that.account);
+        return id.equals(that.id) && cashUser.equals(that.cashUser) && account.equals(that.account);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, account);
+        return Objects.hash(id, cashUser, account);
     }
 
     public UserAccountId getId() {
@@ -52,12 +65,12 @@ public class UserAccount {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public CashUser getCashUser() {
+        return cashUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCashUser(CashUser cashUser) {
+        this.cashUser = cashUser;
     }
 
     public Account getAccount() {

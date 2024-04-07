@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name="user")
-public class User {
+@Table(name="cash_user")
+public class CashUser {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,16 @@ public class User {
     @OneToMany
     @JoinColumn(name="user_id")
     private Set<Account> accounts;
+
+    public CashUser(long id, String name, String password, Set<Account> accounts) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.accounts = accounts;
+    }
+
+    public CashUser() {
+    }
 
     public Set<Account> getAccounts() {
         return accounts;

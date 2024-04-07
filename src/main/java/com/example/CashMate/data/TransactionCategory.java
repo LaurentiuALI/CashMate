@@ -15,6 +15,14 @@ public class TransactionCategory {
     @JoinColumn(name="transaction_id")
     private Transaction transaction;
 
+    public TransactionCategory(TransactionCategoryId id, Transaction transaction, Category category) {
+        this.id = id;
+        this.transaction = transaction;
+        this.category = category;
+    }
+
+    public TransactionCategory() {
+    }
 
     public TransactionCategoryId getId() {
         return id;

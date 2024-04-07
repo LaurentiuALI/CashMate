@@ -16,6 +16,14 @@ public class Recursion {
     @Column(name="date")
     private Date date;
 
+    public Recursion(Long id, Date date) {
+        this.id = id;
+        this.date = date;
+    }
+
+    public Recursion() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

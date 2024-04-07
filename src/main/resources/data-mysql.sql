@@ -1,13 +1,13 @@
--- Inserare în tabelul user
-INSERT INTO user (name, password) VALUES
-                                      ('Alice', 'pass1'),
-                                      ('Bob', 'pass2'),
-                                      ('Charlie', 'pass3'),
-                                      ('David', 'pass4'),
-                                      ('Emma', 'pass5'),
-                                      ('Fiona', 'pass6'),
-                                      ('Fiona', 'pass10'),
-                                      ('George', 'pass7');
+-- Inserare în tabelul cashUser
+INSERT INTO cash_user (name, password) VALUES
+                                           ('Alice', 'pass1'),
+                                           ('Bob', 'pass2'),
+                                           ('Charlie', 'pass3'),
+                                           ('David', 'pass4'),
+                                           ('Emma', 'pass5'),
+                                           ('Fiona', 'pass6'),
+                                           ('Fiona', 'pass10'),
+                                           ('George', 'pass7');
 
 -- Inserare în tabelul account (asociind fiecare cont unui utilizator)
 INSERT INTO account (name, user_id) VALUES
@@ -56,4 +56,4 @@ INSERT INTO transaction (account_id, name, description, amount, date, recursion_
 
 -- Inserare în tabelul transaction_category
 INSERT INTO transaction_category (transaction_id, category_id) VALUES
-                                                                      (1, 1), (2, 4), (3, 5), (4, 2), (5, 3), (6, 4), (7, 6);
+                                                                   (1, 1), (2, 4), (3, 5), (4, 2), (5, 3), (6, 4), (7, 6);

@@ -5,12 +5,10 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class AppStartupEvent implements ApplicationListener<ApplicationReadyEvent> {
 
-    private final UserRepository userRepository;
+    private final CashUserRepository cashUserRepository;
     private final AccountRepository accountRepository;
     private final UserAccountRepository userAccountRepository;
     private final CategoryRepository categoryRepository;
@@ -20,10 +18,10 @@ public class AppStartupEvent implements ApplicationListener<ApplicationReadyEven
 
 
 
-    public AppStartupEvent(UserRepository userRepository, AccountRepository accountRepository,
+    public AppStartupEvent(CashUserRepository cashUserRepository, AccountRepository accountRepository,
                            UserAccountRepository userAccountRepository, CategoryRepository categoryRepository,
                            RecursionRepository recursionRepository, TransactionRepository transactionRepository, TransactionCategoryRepostiory transactionCategoryRepostiory) {
-        this.userRepository = userRepository;
+        this.cashUserRepository = cashUserRepository;
         this.accountRepository = accountRepository;
         this.userAccountRepository = userAccountRepository;
         this.categoryRepository = categoryRepository;
