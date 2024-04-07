@@ -33,7 +33,7 @@ public class AppStartupEvent implements ApplicationListener<ApplicationReadyEven
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
 
-        Iterable<TransactionCategory> userAccounts = transactionCategoryRepostiory.findAll();
-        userAccounts.forEach(System.out::println);
+//        Iterable<TransactionCategory> userAccounts = transactionCategoryRepostiory.findAll();
+//        userAccounts.forEach(System.out::println);
     }
 }

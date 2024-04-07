@@ -20,9 +20,18 @@ public class Account {
     @Column(name = "user_id")
     private Long user_id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="account_id")
     private Set<Transaction> transactions;
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
 
     public Account(Long id, String name, Long user_id, Set<Transaction> transactions) {
         this.id = id;

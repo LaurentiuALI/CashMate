@@ -23,6 +23,12 @@ public class CashUser {
     @JoinColumn(name="user_id")
     private Set<Account> accounts;
 
+    public void addAccount(Account account){
+        if(this.accounts == null){
+            this.accounts = new HashSet<>();
+        }
+        accounts.add(account);
+    }
 
     public Set<Account> getAccounts() {
         return accounts;

@@ -1,87 +1,102 @@
 package com.example.CashMate.data;
 
-
-import com.example.CashMate.services.CashUserService;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest( classes=com.example.CashMate.CashMateApplication.class )
-@ActiveProfiles("mysql")
+
+@DataJpaTest
+@ActiveProfiles("h2")
+@Slf4j
 public class CashUserEntityTest {
 
-    @Autowired
-    CashUserService cashUserService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
-    CashUserRepository cashUserRepository;
+    @BeforeEach
+    public void before(TestInfo testInfo){
+        log.info("Running test " + testInfo.getDisplayName());
+    }
 
     @Test
-    public void updateAccountInfo(){
-        Set<Account> foundAccounts = cashUserService.getUserAccounts(1L);
+    public void findCashUser() {
+       log.info("EntityManager: " + entityManager.getEntityManagerFactory());
 
-        System.out.println(foundAccounts);
-        foundAccounts.forEach(account -> { account.setName("Testing account");});
-        System.out.println(foundAccounts);
-
+       log.info("Searching user with ID 1.");
+        CashUser cashUser = entityManager.find(CashUser.class, 1L);
+        Assertions.assertEquals("Alice", cashUser.getName());
 
     }
 
     @Test
-    public void findCashUser(){
-        Optional<CashUser> foundUser = cashUserRepository.findById(1L);
+    public void findAccount() {
+        log.info("EntityManager: " + entityManager.getEntityManagerFactory());
 
-        Assert.assertEquals("Alice", foundUser.get().getName());
-
+        log.info("Searching account with ID 1.");
+        Account account = entityManager.find(Account.class, 1L);
+        Assertions.assertEquals("Savings Account", account.getName());
     }
 
     @Test
-    public void updateCashUser(){
-        cashUserService.updateName(1L, "Clark");
-        CashUser foundUser = cashUserService.find(1L);
-        Assert.assertEquals("Clark", foundUser.getName());
+    public void findCategory() {
+        log.info("EntityManager: " + entityManager.getEntityManagerFactory());
+
+        log.info("Searching category with ID 1.");
+        Category category = entityManager.find(Category.class, 1L);
+        Assertions.assertEquals("Food", category.getName());
+        Assertions.assertEquals("Expenses related to food purchases", category.getDescription());
     }
 
     @Test
-    public void saveCashUser(){
-        CashUser foundUser = new CashUser("Clark", "Kent");
-        Account newAccount = new Account();
+    public void findRecursion() {
+        log.info("EntityManager: " + entityManager.getEntityManagerFactory());
 
-        newAccount.setUser_id(foundUser.getId());
-        newAccount.setName("Test Account");
+        log.info("Searching recursion with ID 1.");
+        Recursion recursion = entityManager.find(Recursion.class, 1L);
 
-        Set<Account> set = new HashSet<>();
-        set.add(newAccount);
-        
-        foundUser.setAccounts(set);
-
-        cashUserRepository.save(foundUser);
+        String stringExpectedDate = "2024-03-01 00:00:00";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        try {
+            date = formatter.parse(stringExpectedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Assertions.assertEquals(date, recursion.getDate());
     }
 
-//    @Test
-//    public void deleteCashUser(){
-//        CashUser cashUser = new CashUser("Clark", "Kent");
-//
-//        cashUserRepository.save(cashUser);
-//
-//        Optional<CashUser> foundUser = cashUserRepository.findByName("Clark");
-//        cashUserRepository.delete(foundUser.get());
-//        Optional<CashUser> newFoundUser = cashUserRepository.findByName("Clark");
-//
-//        Assert.assertTrue(newFoundUser.isEmpty());
-//    }
+    @Test
+    public void findTransaction() {
+        log.info("EntityManager: " + entityManager.getEntityManagerFactory());
+
+        log.info("Searching transaction with ID 1.");
+        Transaction transaction = entityManager.find(Transaction.class, 1L);
+
+        String stringExpectedDate = "2024-03-01 00:00:00";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        try {
+            date = formatter.parse(stringExpectedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertEquals(1L, transaction.getAccount_id());
+        Assertions.assertEquals("Groceries", transaction.getName());
+        Assertions.assertEquals("Weekly grocery shopping", transaction.getDescription());
+        Assertions.assertEquals(150.5, transaction.getAmount());
+        Assertions.assertEquals(Type.EXPENSE, transaction.getType());
+        Assertions.assertEquals(date, transaction.getDate());
+    }
 }
