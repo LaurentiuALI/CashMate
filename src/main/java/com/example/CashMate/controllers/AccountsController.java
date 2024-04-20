@@ -30,8 +30,7 @@ public class AccountsController {
     @PostMapping("/accounts/add_member")
     public ResponseEntity<String> AddAccountMember(@RequestBody long accountID, long ownerID, long userID) {
         try {
-            accountsService.AddAccountMember(accountID, ownerID, userID);
-            return ResponseEntity.ok("User added to account successfully");
+            return ResponseEntity.ok(accountsService.AddAccountMember(accountID, ownerID, userID));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -40,8 +39,7 @@ public class AccountsController {
     @PostMapping("/accounts/remove_member")
     public ResponseEntity<String> RemoveAccountMember(@RequestBody long accountID, long ownerID, long userID) {
         try {
-            accountsService.RemoveAccountMember(accountID, ownerID, userID);
-            return ResponseEntity.ok("User removed from account successfully");
+            return ResponseEntity.ok(accountsService.RemoveAccountMember(accountID, ownerID, userID));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -50,8 +48,7 @@ public class AccountsController {
     @PostMapping("/accounts/remove")
     public ResponseEntity<String> RemoveAccount(@RequestBody long accountID) {
         try {
-            accountsService.RemoveAccount(accountID);
-            return ResponseEntity.ok("Account removed successfully");
+            return ResponseEntity.ok(accountsService.RemoveAccount(accountID));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -60,8 +57,7 @@ public class AccountsController {
     @PutMapping("/accounts/update")
     public ResponseEntity<String> UpdateAccount(@RequestBody Account account) {
         try {
-            accountsService.UpdateAccount(account.getId(), account.getName(), account.getUser_id());
-            return ResponseEntity.ok("Account updated successfully");
+            return ResponseEntity.ok(accountsService.UpdateAccount(account.getId(), account.getName(), account.getUser_id()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

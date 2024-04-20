@@ -1,113 +1,147 @@
 package com.example.CashMate.services;
 
+import com.example.CashMate.data.*;
+import com.example.CashMate.util.UserGeneralChecks;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
 public class TransactionsServiceImpl implements TransactionsService{
+
+    @PersistenceContext
+    private EntityManager entityManager;
+    UserGeneralChecks userGeneralChecks;
+    TransactionRepository transactionRepository;
+    TransactionCategoryRepository transactionCategoryRepository;
+    CategoryRepository categoryRepository;
+    RecursionRepository recursionRepository;
+
+    public TransactionsServiceImpl(UserGeneralChecks userGeneralChecks, TransactionRepository transactionRepository, TransactionCategoryRepository transactionCategoryRepository, CategoryRepository categoryRepository, RecursionRepository recursionRepository) {
+        this.userGeneralChecks = userGeneralChecks;
+        this.transactionRepository = transactionRepository;
+        this.transactionCategoryRepository = transactionCategoryRepository;
+        this.categoryRepository = categoryRepository;
+        this.recursionRepository = recursionRepository;
+    }
+
     @Override
-    public void CreateTransaction() {
+    public String CreateTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
+        return "Transaction created successfully";
+    }
+
+    @Override
+    @Transactional
+    public String UpdateTransaction(Transaction transaction){
+        entityManager.persist(transaction);
+        return "Account updated successfully";
+    }
+
+    @Override
+    public String RemoveTransaction(long userID, long accountID, long transactionID) {
+        transactionRepository.deleteById(transactionID);
+        return "Transaction removed successfully";
 
     }
 
     @Override
-    public void UpdateTransaction() {
+    public String CreateRecursion(Recursion recursion) {
+        recursionRepository.save(recursion);
+        return "Recursion created successfully";
 
     }
 
     @Override
-    public void RemoveTransaction() {
+    public String UpdateRecursion() {
 
     }
 
     @Override
-    public void CreateRecursion() {
+    public String RemoveRecursion() {
 
     }
 
     @Override
-    public void UpdateRecursion() {
+    public String CreateCategory() {
 
     }
 
     @Override
-    public void RemoveRecursion() {
+    public String UpdateCategory() {
 
     }
 
     @Override
-    public void CreateCategory() {
+    public String RemoveCategory() {
 
     }
 
     @Override
-    public void UpdateCategory() {
+    public Transaction GetTransactionsByID() {
 
     }
 
     @Override
-    public void RemoveCategory() {
+    public Transaction GetTransactionsByUserID() {
 
     }
 
     @Override
-    public void GetTransactionsByID() {
+    public Transaction GetTransactionsByAccountID() {
 
     }
 
     @Override
-    public void GetTransactionsByUserID() {
+    public List<Transaction> GetAllTransactions() {
 
     }
 
     @Override
-    public void GetTransactionsByAccountID() {
+    public Category GetCategoryByID() {
 
     }
 
     @Override
-    public void GetAllTransactions() {
+    public Category GetCategoryByTransactionID() {
 
     }
 
     @Override
-    public void GetCategoryByID() {
+    public List<Category> GetAllCategories() {
 
     }
 
     @Override
-    public void GetCategoryByTransactionID() {
+    public List<Category> GetAllCategoriesByAccountID() {
 
     }
 
     @Override
-    public void GetAllCategories() {
+    public Recursion GetRecursionByID() {
 
     }
 
     @Override
-    public void GetAllCategoriesByAccountID() {
+    public Recursion GetRecursionByTransactionID() {
 
     }
 
     @Override
-    public void GetRecursionByID() {
+    public List<Recursion> GetRecursionsByAccount() {
 
     }
 
     @Override
-    public void GetRecursionByTransactionID() {
+    public Recursion GetRecursionsByUserID() {
 
     }
 
     @Override
-    public void GetRecursionsByAccount() {
-
-    }
-
-    @Override
-    public void GetRecursionsByUserID() {
-
-    }
-
-    @Override
-    public void GetAllRecursions() {
+    public List<Recursion> GetAllRecursions() {
 
     }
 }

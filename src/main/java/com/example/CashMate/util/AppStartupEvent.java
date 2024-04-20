@@ -14,26 +14,26 @@ public class AppStartupEvent implements ApplicationListener<ApplicationReadyEven
     private final CategoryRepository categoryRepository;
     private final RecursionRepository recursionRepository;
     private final TransactionRepository transactionRepository;
-    private final TransactionCategoryRepostiory transactionCategoryRepostiory;
+    private final TransactionCategoryRepository transactionCategoryRepository;
 
 
 
     public AppStartupEvent(CashUserRepository userRepository, AccountRepository accountRepository,
                            UserAccountRepository userAccountRepository, CategoryRepository categoryRepository,
-                           RecursionRepository recursionRepository, TransactionRepository transactionRepository, TransactionCategoryRepostiory transactionCategoryRepostiory) {
+                           RecursionRepository recursionRepository, TransactionRepository transactionRepository, TransactionCategoryRepository transactionCategoryRepository) {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
         this.userAccountRepository = userAccountRepository;
         this.categoryRepository = categoryRepository;
         this.recursionRepository = recursionRepository;
         this.transactionRepository = transactionRepository;
-        this.transactionCategoryRepostiory = transactionCategoryRepostiory;
+        this.transactionCategoryRepository = transactionCategoryRepository;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
 
-//        Iterable<TransactionCategory> userAccounts = transactionCategoryRepostiory.findAll();
-//        userAccounts.forEach(System.out::println);
+        Iterable<TransactionCategory> userAccounts = transactionCategoryRepository.findAll();
+        userAccounts.forEach(System.out::println);
     }
 }
