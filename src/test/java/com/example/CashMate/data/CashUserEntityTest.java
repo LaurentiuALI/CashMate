@@ -81,7 +81,7 @@ public class CashUserEntityTest {
         log.info("EntityManager: " + entityManager.getEntityManagerFactory());
 
         log.info("Searching transaction with ID 1.");
-        Transaction transaction = entityManager.find(Transaction.class, 1L);
+        Transaction transaction = entityManager.find(Transaction.class, 3L);
 
         String stringExpectedDate = "2024-03-01 00:00:00";
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -91,6 +91,8 @@ public class CashUserEntityTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        System.out.println(transaction);
 
         Assertions.assertEquals(1L, transaction.getAccount_id());
         Assertions.assertEquals("Groceries", transaction.getName());

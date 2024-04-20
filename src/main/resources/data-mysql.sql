@@ -39,20 +39,22 @@ INSERT INTO category (name, DESCRIPTION) VALUES
                                              ('Investment', 'Income from investments'),
                                              ('Gifts', 'Expenses related to gifts and donations');
 
--- Inserare în tabelul recursion
-INSERT INTO recursion (date) VALUES
-                                 ('2024-03-01'), ('2024-03-02'), ('2024-03-03'), ('2024-03-04'),
-                                 ('2024-03-05'), ('2024-03-06'), ('2024-03-07');
+
 
 -- Inserare în tabelul transaction
-INSERT INTO transaction (account_id, name, description, amount, date, recursion_id, type) VALUES
-                                                                                              (1, 'Groceries', 'Weekly grocery shopping', 150.50, '2024-03-01', 1, 'EXPENSE'),
-                                                                                              (1, 'Dinner', 'Dinner with friends', 50.00, '2024-03-02', 2, 'EXPENSE'),
-                                                                                              (2, 'Salary', 'Monthly salary', 2500.00, '2024-03-03', 3, 'INCOME'),
-                                                                                              (2, 'Gasoline', 'Fuel for car', 70.25, '2024-03-04', 4, 'EXPENSE'),
-                                                                                              (3, 'Electricity Bill', 'Monthly electricity bill', 120.00, '2024-03-05', 5, 'EXPENSE'),
-                                                                                              (3, 'Netflix Subscription', 'Monthly subscription', 15.99, '2024-03-06', 6, 'EXPENSE'),
-                                                                                              (4, 'Stock Purchase', 'Investment in stocks', 500.00, '2024-03-07', 7, 'EXPENSE');
+INSERT INTO transaction (account_id, name, description, amount, date, type) VALUES
+                                                                                              (1, 'Groceries', 'Weekly grocery shopping', 150.50, '2024-03-01', 'EXPENSE'),
+                                                                                              (1, 'Dinner', 'Dinner with friends', 50.00, '2024-03-02', 'EXPENSE'),
+                                                                                              (2, 'Salary', 'Monthly salary', 2500.00, '2024-03-03', 'INCOME'),
+                                                                                              (2, 'Gasoline', 'Fuel for car', 70.25, '2024-03-04', 'EXPENSE'),
+                                                                                              (3, 'Electricity Bill', 'Monthly electricity bill', 120.00, '2024-03-05', 'EXPENSE'),
+                                                                                              (3, 'Netflix Subscription', 'Monthly subscription', 15.99, '2024-03-06', 'EXPENSE'),
+                                                                                              (4, 'Stock Purchase', 'Investment in stocks', 500.00, '2024-03-07', 'EXPENSE');
+
+-- Inserare în tabelul recursion
+INSERT INTO recursion (transaction_id, date) VALUES
+                                                 (2, '2024-03-01'), (3, '2024-03-02'), (4, '2024-03-03'), (5, '2024-03-04'),
+                                                 (6, '2024-03-05');
 
 -- Inserare în tabelul transaction_category
 INSERT INTO transaction_category (transaction_id, category_id) VALUES

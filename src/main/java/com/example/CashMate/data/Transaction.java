@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="transaction")
@@ -25,11 +26,15 @@ public class Transaction {
     @Column(name = "amount")
     private Double amount;
 
-    @Column(name = "recursion_id")
-    private Long recursion_id;
+    @Column(name = "date")
+    private Date date;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private Type type;
+
+    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL)
+    private Recursion recursion;
 
     @Override
     public String toString() {
@@ -39,19 +44,19 @@ public class Transaction {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
-                ", recursion_id=" + recursion_id +
-                ", type=" + type +
                 ", date=" + date +
+                ", type=" + type +
+                ", recursion=" + recursion.getId() +
                 '}';
     }
 
-    public Transaction(Long id, Long account_id, String name, String description, Double amount, Long recursion_id, Type type, Date date) {
+
+    public Transaction(Long id, Long account_id, String name, String description, Double amount, Type type, Date date) {
         this.id = id;
         this.account_id = account_id;
         this.name = name;
         this.description = description;
         this.amount = amount;
-        this.recursion_id = recursion_id;
         this.type = type;
         this.date = date;
     }
@@ -63,9 +68,6 @@ public class Transaction {
     public void setDate(Date date) {
         this.date = date;
     }
-
-    @Column(name = "date")
-    private Date date;
 
     public Transaction(Long id, Long account_id) {
         this.id = id;
@@ -92,13 +94,12 @@ public class Transaction {
     }
 
 
-    public Transaction(Long id, Long account_id, String name, String description, Double amount, Long recursion_id, Type type) {
+    public Transaction(Long id, Long account_id, String name, String description, Double amount, Type type) {
         this.id = id;
         this.account_id = account_id;
         this.name = name;
         this.description = description;
         this.amount = amount;
-        this.recursion_id = recursion_id;
         this.type = type;
     }
 
@@ -134,14 +135,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Long getRecursion_id() {
-        return recursion_id;
-    }
-
-    public void setRecursion_id(Long recursion_id) {
-        this.recursion_id = recursion_id;
-    }
-
     public Type getType() {
         return type;
     }
@@ -155,12 +148,12 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return id.equals(that.id) && account_id.equals(that.account_id) && name.equals(that.name) && description.equals(that.description) && amount.equals(that.amount) && Objects.equals(recursion_id, that.recursion_id) && type == that.type;
+        return id.equals(that.id) && account_id.equals(that.account_id) && name.equals(that.name) && description.equals(that.description) && amount.equals(that.amount) && type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, account_id, name, description, amount, recursion_id, type);
+        return Objects.hash(id, account_id, name, description, amount, type);
     }
 }
 

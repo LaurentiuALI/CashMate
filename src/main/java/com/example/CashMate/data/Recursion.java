@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="recursion")
@@ -15,6 +16,18 @@ public class Recursion {
 
     @Column(name="date")
     private Date date;
+
+    @OneToOne
+    private Transaction transaction;
+
+    @Override
+    public String toString() {
+        return "Recursion{" +
+                "id=" + id +
+                ", date=" + date +
+                ", transaction=" + transaction +
+                '}';
+    }
 
     public Recursion(Long id, Date date) {
         this.id = id;
@@ -35,14 +48,6 @@ public class Recursion {
     @Override
     public int hashCode() {
         return Objects.hash(id, date);
-    }
-
-    @Override
-    public String toString() {
-        return "Recursion{" +
-                "id=" + id +
-                ", date=" + date +
-                '}';
     }
 
     public long getId() {

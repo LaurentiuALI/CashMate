@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS account (
                                        FOREIGN KEY (user_id) REFERENCES cash_user(id) ON DELETE CASCADE
 );
 
-CREATE TABLE user_account (
+CREATE TABLE IF NOT EXISTS user_account (
                               user_id BIGINT NOT NULL,
                               account_id BIGINT NOT NULL,
 
@@ -27,11 +27,6 @@ CREATE TABLE IF NOT EXISTS category (
                                         description varchar(255)
 );
 
-CREATE TABLE IF NOT EXISTS recursion (
-                                         id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                                         date DATETIME NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS transaction (
                                            id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                            account_id BIGINT NOT NULL,
@@ -39,12 +34,18 @@ CREATE TABLE IF NOT EXISTS transaction (
                                            description varchar(255),
                                            amount double precision not null,
                                            date DATETIME not null,
-                                           recursion_id BIGINT NOT NULL,
                                            type ENUM('EXPENSE', 'INCOME') NOT NULL,
 
-                                           FOREIGN KEY (recursion_id) REFERENCES recursion(id) ON DELETE CASCADE,
                                            FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS recursion (
+                                         id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                         transaction_id BIGINT NOT NULL UNIQUE,
+                                         date DATETIME NOT NULL,
+
+                                         FOREIGN KEY (transaction_id) REFERENCES transaction(id) ON DELETE CASCADE
+    );
 
 CREATE TABLE IF NOT EXISTS transaction_category (
                                                     transaction_id BIGINT NOT NULL,
