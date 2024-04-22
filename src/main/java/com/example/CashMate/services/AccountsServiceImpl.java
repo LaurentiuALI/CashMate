@@ -1,14 +1,13 @@
 package com.example.CashMate.services;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.util.AccountGeneralChecks;
 import com.example.CashMate.util.UserGeneralChecks;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,13 +17,20 @@ public class AccountsServiceImpl implements AccountsService{
     @PersistenceContext
     private EntityManager entityManager;
     UserGeneralChecks userGeneralChecks;
+    AccountGeneralChecks accountGeneralChecks;
     AccountRepository accountRepository;
     UserAccountRepository userAccountRepository;
     CashUserRepository cashUserRepository;
 
 
-    public AccountsServiceImpl(UserGeneralChecks userGeneralChecks, AccountRepository accountRepository, UserAccountRepository userAccountRepository, CashUserRepository cashUserRepository) {
+    public AccountsServiceImpl(
+            UserGeneralChecks userGeneralChecks,
+            AccountGeneralChecks accountGeneralChecks,
+            AccountRepository accountRepository,
+            UserAccountRepository userAccountRepository,
+            CashUserRepository cashUserRepository) {
         this.userGeneralChecks = userGeneralChecks;
+        this.accountGeneralChecks = accountGeneralChecks;
         this.accountRepository = accountRepository;
         this.userAccountRepository = userAccountRepository;
         this.cashUserRepository = cashUserRepository;
@@ -44,7 +50,7 @@ public class AccountsServiceImpl implements AccountsService{
     public String AddAccountMember(long accountID, long ownerID, long userID) {
         userGeneralChecks.userValidityCheck(userID);
         userGeneralChecks.userValidityCheck(ownerID);
-        CheckUserAuthorityOnAccount(accountID, ownerID);
+        accountGeneralChecks.CheckUserAdministratorAuthorityOnAccount(accountID, ownerID);
         UserAccountId userAccountId = new UserAccountId(accountID, userID);
         UserAccount userAccount = new UserAccount(userAccountId);
         userAccountRepository.save(userAccount);
@@ -55,7 +61,7 @@ public class AccountsServiceImpl implements AccountsService{
     public String RemoveAccountMember(long accountID, long ownerID, long userID) {
         userGeneralChecks.userValidityCheck(userID);
         userGeneralChecks.userValidityCheck(ownerID);
-        CheckUserAuthorityOnAccount(accountID, ownerID);
+        accountGeneralChecks.CheckUserAdministratorAuthorityOnAccount(accountID, ownerID);
         UserAccountId userAccountId = new UserAccountId(accountID, userID);
         userAccountRepository.deleteById(userAccountId);
         return "User removed from account successfully";
@@ -63,7 +69,7 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public String RemoveAccount(long accountID) {
-        CheckUserAuthorityOnAccount(accountID, accountID);
+        accountGeneralChecks.CheckUserAdministratorAuthorityOnAccount(accountID, accountID);
         accountRepository.deleteById(accountID);
         return "Account removed successfully";
     }
@@ -71,7 +77,7 @@ public class AccountsServiceImpl implements AccountsService{
     @Override
     @Transactional
     public String UpdateAccount(long accountId, String name, long userId){
-        CheckUserAuthorityOnAccount(accountId, userId);
+        accountGeneralChecks.CheckUserAdministratorAuthorityOnAccount(accountId, userId);
         Account updatedAccount = entityManager.find(Account.class, accountId);
         updatedAccount.setName(name);
         entityManager.persist(updatedAccount);
@@ -80,7 +86,7 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public Account GetAccount(long accountID, long userID) {
-        CheckUserViewPermissionOnAccount(accountID, userID);
+        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(accountID, userID);
         Account account = accountRepository.findById(accountID).orElse(null);
         if (account == null){
             throw new RuntimeException("Account not found!");
@@ -96,28 +102,6 @@ public class AccountsServiceImpl implements AccountsService{
             throw new RuntimeException("Accounts not found!");
         }
         return accounts;
-    }
-
-    public void CheckUserAuthorityOnAccount(long accountID, long userID) {
-        Account account = accountRepository.findById(accountID).orElse(null);
-        if (account == null){
-            throw new RuntimeException("Account not found!");
-        }
-        if (account.getUser_id() != userID) {
-            throw new RuntimeException("User not authorized to perform this action!");
-        }
-    }
-
-    public void CheckUserViewPermissionOnAccount(long accountID, long userID) {
-        Account account = accountRepository.findById(accountID).orElse(null);
-        if (account == null) {
-            throw new RuntimeException("Account not found!");
-        }
-        UserAccountId userAccountId = new UserAccountId(accountID, userID);
-        UserAccount userAccount = userAccountRepository.findById(userAccountId).orElse(null);
-        if (userAccount == null) {
-            throw new RuntimeException("User not authorized to view this account!");
-        }
     }
 
 
