@@ -12,4 +12,6 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
 
     List<Account> findAll();
 
+
+    Account save(Account product);
 }

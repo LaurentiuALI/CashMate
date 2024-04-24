@@ -94,7 +94,6 @@ public class CashUserEntityTest {
 
         System.out.println(transaction);
 
-        Assertions.assertEquals(1L, transaction.getAccount_id());
         Assertions.assertEquals("Groceries", transaction.getName());
         Assertions.assertEquals("Weekly grocery shopping", transaction.getDescription());
         Assertions.assertEquals(150.5, transaction.getAmount());

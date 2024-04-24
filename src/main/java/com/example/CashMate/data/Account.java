@@ -20,8 +20,7 @@ public class Account {
     @Column(name = "user_id")
     private Long user_id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="account_id")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 
     public Set<Transaction> getTransactions() {

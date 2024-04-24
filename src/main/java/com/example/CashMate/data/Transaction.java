@@ -1,5 +1,6 @@
 package com.example.CashMate.data;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -14,8 +15,9 @@ public class Transaction {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "account_id")
-    private Long account_id;
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
     @Column(name = "name")
     private String name;
@@ -37,10 +39,22 @@ public class Transaction {
     private Recursion recursion;
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return id.equals(that.id) && account.equals(that.account) && name.equals(that.name) && Objects.equals(description, that.description) && amount.equals(that.amount) && date.equals(that.date) && type == that.type && Objects.equals(recursion, that.recursion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, account, name, description, amount, date, type, recursion);
+    }
+
+    @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
-                ", account_id=" + account_id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
@@ -51,14 +65,31 @@ public class Transaction {
     }
 
 
-    public Transaction(Long id, Long account_id, String name, String description, Double amount, Type type, Date date) {
+    public Transaction(Long id, Account account, String name, String description, Double amount, Type type, Date date) {
         this.id = id;
-        this.account_id = account_id;
+        this.account = account;
         this.name = name;
         this.description = description;
         this.amount = amount;
         this.type = type;
         this.date = date;
+    }
+
+    public Transaction(Long id, Account account, String name, String description, Double amount, Type type) {
+        this.id = id;
+        this.account = account;
+        this.name = name;
+        this.description = description;
+        this.amount = amount;
+        this.type = type;
+    }
+
+    public Transaction(Long id, Account account) {
+        this.id = id;
+        this.account = account;
+    }
+
+    public Transaction() {
     }
 
     public Date getDate() {
@@ -69,14 +100,6 @@ public class Transaction {
         this.date = date;
     }
 
-    public Transaction(Long id, Long account_id) {
-        this.id = id;
-        this.account_id = account_id;
-    }
-
-    public Transaction() {
-    }
-
     public long getId() {
         return id;
     }
@@ -85,30 +108,8 @@ public class Transaction {
         this.id = id;
     }
 
-    public long getAccount_id() {
-        return account_id;
-    }
-
-    public void setAccount_id(long account_id) {
-        this.account_id = account_id;
-    }
-
-
-    public Transaction(Long id, Long account_id, String name, String description, Double amount, Type type) {
-        this.id = id;
-        this.account_id = account_id;
-        this.name = name;
-        this.description = description;
-        this.amount = amount;
-        this.type = type;
-    }
-
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setAccount_id(Long account_id) {
-        this.account_id = account_id;
     }
 
     public String getName() {
@@ -141,19 +142,6 @@ public class Transaction {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
-        return id.equals(that.id) && account_id.equals(that.account_id) && name.equals(that.name) && description.equals(that.description) && amount.equals(that.amount) && type == that.type;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, account_id, name, description, amount, type);
     }
 }
 

@@ -5,6 +5,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 @Component
 public class AppStartupEvent implements ApplicationListener<ApplicationReadyEvent> {
 
@@ -32,8 +35,7 @@ public class AppStartupEvent implements ApplicationListener<ApplicationReadyEven
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-
-//        Iterable<TransactionCategory> userAccounts = transactionCategoryRepostiory.findAll();
-//        userAccounts.forEach(System.out::println);
+//        Optional<Transaction> transaction = transactionRepository.findById(2L);
+//        System.out.println(transaction.get());
     }
 }
