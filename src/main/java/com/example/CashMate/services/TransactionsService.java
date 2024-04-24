@@ -1,26 +1,27 @@
 package com.example.CashMate.services;
 
+import com.example.CashMate.data.Category;
+import com.example.CashMate.data.Recursion;
+import com.example.CashMate.data.Transaction;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 public interface TransactionsService {
-    void CreateTransaction();
-    void UpdateTransaction();
-    void RemoveTransaction();
-    void CreateRecursion();
-    void UpdateRecursion();
-    void RemoveRecursion();
-    void CreateCategory();
-    void UpdateCategory();
-    void RemoveCategory();
-    void GetTransactionsByID();
-    void GetTransactionsByUserID();
-    void GetTransactionsByAccountID();
-    void GetAllTransactions();
-    void GetCategoryByID();
-    void GetCategoryByTransactionID();
-    void GetAllCategories();
-    void GetAllCategoriesByAccountID();
-    void GetRecursionByID();
-    void GetRecursionByTransactionID();
-    void GetRecursionsByAccount();
-    void GetRecursionsByUserID();
-    void GetAllRecursions();
+    String CreateTransaction(Transaction transaction, long userID);
+    String UpdateTransaction(Transaction transaction, long userID);
+    String RemoveTransaction(long userID, long accountID, long transactionID);
+    String CreateRecursion(Recursion recursion, long userID);
+    String UpdateRecursion(Recursion recursion);
+    String RemoveRecursion(long userID, long accountID, long recursionID);
+    Optional<Transaction> GetTransactionsByID(long transactionID);
+    Transaction GetTransactionsByUserID(long userID);
+    Set<Transaction> GetTransactionsByAccountID(long accountID, long userID);
+    List<Transaction> GetAllTransactions();
+    Category GetCategoryByID(long categoryID);
+    Category GetCategoryByTransactionID(long transactionID);
+    List<Category> GetAllCategories();
+    List<Category> GetAllCategoriesByAccountID(long accountID);
+    List<Recursion> GetRecursionsByAccountID(long accountID);
 }
