@@ -1,10 +1,11 @@
 package com.example.CashMate.repositories;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.data.security.CashUser;
+import com.example.CashMate.repositories.security.CashUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

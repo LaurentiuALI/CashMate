@@ -39,19 +39,6 @@ public class Transaction {
     private Recursion recursion;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
-        return id.equals(that.id) && account.equals(that.account) && name.equals(that.name) && Objects.equals(description, that.description) && amount.equals(that.amount) && date.equals(that.date) && type == that.type && Objects.equals(recursion, that.recursion);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, account, name, description, amount, date, type, recursion);
-    }
-
-    @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
@@ -142,6 +129,27 @@ public class Transaction {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return id.equals(that.id) && account.equals(that.account) && name.equals(that.name) && Objects.equals(description, that.description) && amount.equals(that.amount) && date.equals(that.date) && type == that.type && Objects.equals(recursion, that.recursion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, account, name, description, amount, date, type, recursion);
     }
 }
 

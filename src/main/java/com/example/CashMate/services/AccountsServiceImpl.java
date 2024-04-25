@@ -1,15 +1,18 @@
 package com.example.CashMate.services;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.data.security.CashUser;
 import com.example.CashMate.dtos.AccountDTO;
+import com.example.CashMate.repositories.AccountRepository;
+import com.example.CashMate.repositories.security.CashUserRepository;
+import com.example.CashMate.repositories.TransactionRepository;
+import com.example.CashMate.repositories.UserAccountRepository;
 import com.example.CashMate.util.UserGeneralChecks;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -161,14 +164,15 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
 
-    public void CheckUserAuthorityOnAccount(long accountID, long userID) {
+    public String CheckUserAuthorityOnAccount(long accountID, long userID) {
         Account account = accountRepository.findById(accountID).orElse(null);
         if (account == null){
             throw new RuntimeException("Account not found!");
         }
         if (account.getUser_id() != userID) {
-            throw new RuntimeException("User not authorized to perform this action!");
+            return "accesDenied";
         }
+        return "";
     }
 
     public void CheckUserViewPermissionOnAccount(long accountID, long userID) {

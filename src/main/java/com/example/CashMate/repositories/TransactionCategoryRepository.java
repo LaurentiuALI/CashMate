@@ -1,5 +1,7 @@
-package com.example.CashMate.data;
+package com.example.CashMate.repositories;
 
+import com.example.CashMate.data.TransactionCategory;
+import com.example.CashMate.data.TransactionCategoryId;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

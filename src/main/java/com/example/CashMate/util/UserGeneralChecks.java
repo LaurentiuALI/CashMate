@@ -1,6 +1,6 @@
 package com.example.CashMate.util;
 
-import com.example.CashMate.data.CashUserRepository;
+import com.example.CashMate.repositories.security.CashUserRepository;
 import org.springframework.stereotype.Component;
 
 

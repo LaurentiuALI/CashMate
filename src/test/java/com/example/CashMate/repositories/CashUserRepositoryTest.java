@@ -1,8 +1,8 @@
 package com.example.CashMate.repositories;
 
 
-import com.example.CashMate.data.CashUser;
-import com.example.CashMate.data.CashUserRepository;
+import com.example.CashMate.data.security.CashUser;
+import com.example.CashMate.repositories.security.CashUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import static org.junit.Assert.assertFalse;
 import org.junit.jupiter.api.Test;

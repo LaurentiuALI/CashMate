@@ -1,19 +1,14 @@
 package com.example.CashMate.controllers;
 
-import com.example.CashMate.data.Account;
-import com.example.CashMate.data.CashUser;
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
-import lombok.extern.java.Log;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller

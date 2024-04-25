@@ -1,5 +1,6 @@
 package com.example.CashMate.data;
 
+import com.example.CashMate.data.security.CashUser;
 import jakarta.persistence.*;
 
 import java.util.Objects;

@@ -1,6 +1,8 @@
 package com.example.CashMate.util;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.repositories.AccountRepository;
+import com.example.CashMate.repositories.UserAccountRepository;
 import org.springframework.stereotype.Component;
 
 @Component

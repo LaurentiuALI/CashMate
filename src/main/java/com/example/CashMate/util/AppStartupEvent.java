@@ -1,12 +1,10 @@
 package com.example.CashMate.util;
 
-import com.example.CashMate.data.*;
+import com.example.CashMate.repositories.*;
+import com.example.CashMate.repositories.security.CashUserRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class AppStartupEvent implements ApplicationListener<ApplicationReadyEvent> {

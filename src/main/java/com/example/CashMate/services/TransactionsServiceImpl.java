@@ -1,6 +1,7 @@
 package com.example.CashMate.services;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.repositories.*;
 import com.example.CashMate.util.AccountGeneralChecks;
 import com.example.CashMate.util.UserGeneralChecks;
 import jakarta.persistence.EntityManager;
@@ -44,7 +45,7 @@ public class TransactionsServiceImpl implements TransactionsService{
 
     @Override
     public String CreateTransaction(Transaction transaction, long userID) {
-        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount_id(), userID);
+        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount().getId(), userID);
         transactionRepository.save(transaction);
         return "Transaction created successfully";
     }
@@ -52,7 +53,7 @@ public class TransactionsServiceImpl implements TransactionsService{
     @Override
     @Transactional
     public String UpdateTransaction(Transaction transaction, long userID){
-        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount_id(), userID);
+        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount().getId(), userID);
         entityManager.persist(transaction);
         return "Account updated successfully";
     }

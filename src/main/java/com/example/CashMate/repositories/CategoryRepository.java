@@ -1,5 +1,6 @@
-package com.example.CashMate.data;
+package com.example.CashMate.repositories;
 
+import com.example.CashMate.data.Category;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
