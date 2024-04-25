@@ -50,32 +50,29 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
     @Override
-    public AccountDTO save(AccountDTO accountDTO){
+    public AccountDTO updateAccount(AccountDTO accountDTO){
         userGeneralChecks.userValidityCheck(accountDTO.getUser_id());
 
         Optional<Account> findAccount = accountRepository.findById(accountDTO.getId());
+
+        log.info("Updating info for account with id " + accountDTO.getId());
 
         if(findAccount.isPresent()){
             findAccount.get().setName(accountDTO.getName());
             Account accountSaved = accountRepository.save(findAccount.get());
             return modelMapper.map(accountSaved, AccountDTO.class);
         }else {
-            Account accountSaved = accountRepository.save(modelMapper.map(accountDTO, Account.class));
-
-            if(cashUserRepository.existsById(accountDTO.getUser_id())){
-                UserAccountId userAccountId = new UserAccountId(accountDTO.getId(), accountDTO.getUser_id());
-                if(!userAccountRepository.existsById(userAccountId)){
-                    UserAccount userAccount = new UserAccount(userAccountId);
-                    userAccountRepository.save(userAccount);
-                } else {
-                    log.error("Cannot create association between user and account. Check if already exists.");
-                }
-            } else {
                 log.error("Cannot save account. The user does not exist");
-            }
-
-            return modelMapper.map(accountSaved, AccountDTO.class);
         }
+        return null;
+    }
+
+    @Override
+    public AccountDTO createAccount(AccountDTO accountDTO){
+        userGeneralChecks.userValidityCheck(accountDTO.getUser_id());
+        accountRepository.save( modelMapper.map(accountDTO,Account.class));
+
+        return accountDTO;
     }
 
     @Override

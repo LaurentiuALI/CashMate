@@ -52,11 +52,11 @@ public class DataLoader implements CommandLineRunner {
             userRepository.save(guest);
 
 
-            admin = userRepository.findByName("admin").get(0);
+        }
+        if(accountRepository.count() == 0){
+            CashUser admin = userRepository.findByName("admin").get(0);
             AccountDTO account = new AccountDTO(1L, "Testing", admin.getId(), new HashSet<>(), admin.getName());
-
             cashUserService.addAccount(admin.getName(), account);
-
         }
     }
 

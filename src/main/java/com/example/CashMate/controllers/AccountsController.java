@@ -1,10 +1,14 @@
 package com.example.CashMate.controllers;
 
 import com.example.CashMate.dtos.AccountDTO;
+import com.example.CashMate.dtos.CashUserDTO;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +23,24 @@ public class AccountsController {
     AccountsService accountsService;
     CashUserService cashUserService;
 
-    public AccountsController(AccountsService accountsService, CashUserService cashUserService) {
+    ModelMapper modelMapper;
+
+    public AccountsController(AccountsService accountsService, CashUserService cashUserService, ModelMapper modelMapper) {
 
         this.accountsService = accountsService;
         this.cashUserService = cashUserService;
+        this.modelMapper = modelMapper;
+
     }
 
     @RequestMapping({"/", ""})
     public String accountList(Model model){
 
-        Set<AccountDTO> accounts = accountsService.GetAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
+
+        Set<AccountDTO> accounts = accountsService.GetAllAccountsByUser(loggedUser.getId());
         for(AccountDTO account: accounts){
             account.setOwnerName(accountsService.GetAccountOwnerName(account));
         }
@@ -51,13 +63,25 @@ public class AccountsController {
         return "AccountForm";
     }
 
+    @RequestMapping("/add")
+    public String CreateAccount(Model model) {
+        AccountDTO account = new AccountDTO();
+        model.addAttribute("account", account);
+        return "AccountAdd";
+    }
+
     @PostMapping({"/", ""})
     public String saveOrUpdate(@ModelAttribute AccountDTO account) {
-        System.out.println("account id: " + account.getId());
-        System.out.println("account name: " + account.getName());
-        System.out.println("account user: " + account.getUser_id());
-      accountsService.save(account);
-      return "redirect:/accounts";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
+
+        account.setUser_id(loggedUser.getId());
+
+        if(account.getId() != null)
+            accountsService.updateAccount(account);
+        else
+            accountsService.createAccount(account);
+        return "redirect:/accounts";
     }
 
     @PostMapping("/add_member")

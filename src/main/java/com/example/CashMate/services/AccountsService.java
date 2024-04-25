@@ -1,9 +1,7 @@
 package com.example.CashMate.services;
 
-import com.example.CashMate.data.Account;
 import com.example.CashMate.dtos.AccountDTO;
 
-import java.util.List;
 import java.util.Set;
 
 public interface AccountsService {
@@ -14,6 +12,7 @@ public interface AccountsService {
     Set<AccountDTO> GetAllAccountsByUser(long userID);
     Set<AccountDTO> GetAll();
     AccountDTO getById(long accountID);
-    AccountDTO save(AccountDTO accountDTO);
+    AccountDTO updateAccount(AccountDTO accountDTO);
     String GetAccountOwnerName(AccountDTO account);
+    AccountDTO createAccount(AccountDTO accountDTO);
 }
