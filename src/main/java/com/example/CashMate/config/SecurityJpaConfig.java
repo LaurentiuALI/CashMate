@@ -30,7 +30,7 @@ public class SecurityJpaConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeRequests(auth -> auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/product/form").hasRole("ADMIN")
                         .requestMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
                         .requestMatchers("/product/*").hasAnyRole("ADMIN", "GUEST")
