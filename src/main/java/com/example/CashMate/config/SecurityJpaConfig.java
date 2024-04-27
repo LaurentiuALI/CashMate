@@ -4,6 +4,7 @@ import com.example.CashMate.services.security.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,9 +33,9 @@ public class SecurityJpaConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/product/form").hasRole("ADMIN")
-                        .requestMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
-                        .requestMatchers("/product/*").hasAnyRole("ADMIN", "GUEST")
-                        .requestMatchers("/categories/*").hasAnyRole("ADMIN", "GUEST")
+                        .requestMatchers("/", "/webjars/**","/register", "/resources/**").permitAll()
+                        .requestMatchers("/home").hasAnyRole("ADMIN", "GUEST")
+                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)
@@ -43,6 +44,7 @@ public class SecurityJpaConfig {
                                 .loginPage("/login")
                                 .permitAll()
                                 .loginProcessingUrl("/perform_login")
+                                .successForwardUrl("/home")
                 )
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
                 .build();

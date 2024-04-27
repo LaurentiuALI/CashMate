@@ -9,6 +9,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -16,5 +17,7 @@ public interface CashUserService {
 
     CashUserDTO getByName(String name);
     CashUserDTO addAccount(String name, AccountDTO accountDto);
+    CashUserDTO createAccount(CashUserDTO cashUserDTO);
 
+    List<CashUser> getAll();
 }
