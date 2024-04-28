@@ -46,6 +46,10 @@
         .navbar-nav .nav-item {
             margin: 0 20px;
         }
+
+        .color-element {
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +83,7 @@
         </div>
     </div>
 </nav>
+
 <div class="container">
     <table class="table table-hover ">
         <thead class="thead-inverse">
@@ -95,9 +100,9 @@
             <td th:text="${account.id}">1</td>
             <td th:text="${account.name}">Account 1</td>
             <td th:text="${account.ownerName}">Owner 1</td>
-            <td><a href="#" th:href="@{'/accounts/edit/' + ${account.id}}"><i class="fa-solid fa-pen"></i></a></td>
-            <td><a href="#" th:href="@{'/accounts/members/' + ${account.id}}"><i class="fa-solid fa-people-arrows"></i></a></td>
-            <td><a href="#" th:href="@{'/accounts/delete/' + ${account.id}}"><i class="fa-solid fa-trash"></i></a></td>
+            <td><a href="#" th:if="${account.user_id} == ${loggedUser.id}" th:href="@{'/accounts/edit/' + ${account.id}}"><i class="color-element fa-solid fa-pen"></i></a></td>
+            <td><a href="#" th:if="${account.user_id} == ${loggedUser.id}" th:href="@{'/accounts/members/' + ${account.id}}"><i class="color-element fa-solid fa-people-arrows"></i></a></td>
+            <td><a href="#" th:if="${account.user_id} == ${loggedUser.id}" th:href="@{'/accounts/delete/' + ${account.id}}"><i class="color-element fa-solid fa-trash"></i></a></td>
         </tr>
 
     </table>

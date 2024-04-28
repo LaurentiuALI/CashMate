@@ -8,6 +8,7 @@
     <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css"/>
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -45,7 +46,33 @@
         .navbar-nav .nav-item {
             margin: 0 20px;
         }
+
+        .color-element {
+            color: #28a745;
+        }
+
+        .color-bg {
+            background-color: #28a745;
+        }
+
+        .btn-primary {
+            --bs-btn-color: #fff;
+            --bs-btn-bg: #28a745;
+            --bs-btn-border-color: #28a745;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-hover-bg: #1c5c2a;
+            --bs-btn-hover-border-color: #1c5c2a;
+            --bs-btn-focus-shadow-rgb: 49, 132, 253;
+            --bs-btn-active-color: #fff;
+            --bs-btn-active-bg: #1c5c2a;
+            --bs-btn-active-border-color: #1c5c2a;
+            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+            --bs-btn-disabled-color: #fff;
+            --bs-btn-disabled-bg: #28a745;
+            --bs-btn-disabled-border-color: #28a745;
+        }
     </style>
+
 </head>
 <body>
 
@@ -82,10 +109,32 @@
 
 <div class="container">
     <h1>Members</h1>
-
-    <a th:href="@{'/accounts/members/addMember/' + ${accountID}}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add New Member
-    </a>
+    <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMemberModalLabel">Add Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" th:action="@{'/accounts/members/addMember/' + ${accountID}}">
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Member Name</label>
+                            <input class="form-control" id="userName" name="userName" type="text" placeholder="User name"/>
+                            <div id="memberNameHelp" class="form-text">Enter the member's full name.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary my-2">Save Member</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+        <i class="fas fa-plus-circle"></i> Add Member
+    </button>
 
     <table class="table table-striped">
         <thead>

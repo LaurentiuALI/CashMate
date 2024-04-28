@@ -109,8 +109,7 @@ public class AccountsServiceImpl implements AccountsService{
         userGeneralChecks.userValidityCheck(userID);
         userGeneralChecks.userValidityCheck(ownerID);
         CheckUserAuthorityOnAccount(accountID, ownerID);
-        UserAccountId userAccountId = new UserAccountId(accountID, userID);
-        userAccountRepository.deleteById(userAccountId);
+        userAccountRepository.deleteByAccountIdAndUserId(accountID, userID);
         return "User removed from account successfully";
     }
 
@@ -141,7 +140,7 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
     @Override
-    public String GetAccountOwnerName(AccountDTO account){
+    public CashUserDTO GetAccountOwner(AccountDTO account){
 
         if(account == null){
             throw new RuntimeException("Accounts not found!");
@@ -153,7 +152,7 @@ public class AccountsServiceImpl implements AccountsService{
             throw new RuntimeException("User not found!");
         }
 
-        return cashUser.get().getName();
+        return modelMapper.map(cashUser.get(), CashUserDTO.class);
     }
 
     @Override
@@ -167,16 +166,7 @@ public class AccountsServiceImpl implements AccountsService{
         return accounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toSet());
     }
 
-    @Override
-    public Set<AccountDTO> GetAll(){
-        List<Account> accounts = Objects.requireNonNull(accountRepository.findAll());
-        if (accounts == null){
-            throw new RuntimeException("Accounts not found!");
-        }
 
-        return accounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toSet());
-
-    }
 
     @Override
     public List<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID){
@@ -186,6 +176,8 @@ public class AccountsServiceImpl implements AccountsService{
         List<Account> participantAccounts = userAccountRepository.findAccountsByUserId(userID);
 
         user.ifPresent(cashUser -> participantAccounts.addAll(cashUser.getAccounts()));
+
+        participantAccounts.sort((a1, a2) -> (int) (a1.getId() - a2.getId()));
 
         return participantAccounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toList());
     }

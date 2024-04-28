@@ -13,8 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/accounts")
@@ -41,11 +40,12 @@ public class AccountsController {
 
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
 
-        Set<AccountDTO> accounts = accountsService.getAllAccountsOwnedByUser(loggedUser.getId());
+        List<AccountDTO> accounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
         for(AccountDTO account: accounts){
-            account.setOwnerName(accountsService.GetAccountOwnerName(account));
+            account.setOwnerName(accountsService.GetAccountOwner(account).getName());
         }
         model.addAttribute("accounts", accounts);
+        model.addAttribute("loggedUser", loggedUser);
 
 
         return "accountList";
@@ -93,14 +93,6 @@ public class AccountsController {
         return "members";
     }
 
-
-    @RequestMapping("/members/addMember/{accountID}")
-    public String AddAccountMemberSelectionPanel(Model model, @PathVariable long accountID) {
-        String userName = "";
-        model.addAttribute("accountID", accountID);
-        model.addAttribute("userName", userName);
-        return "addMember";
-    }
 
     @PostMapping("/members/addMember/{accountID}")
     public String AddAccountMember(@RequestParam("userName") String userName, @PathVariable long accountID) {

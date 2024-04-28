@@ -1,5 +1,6 @@
 package com.example.CashMate.services;
 
+import com.example.CashMate.data.security.CashUser;
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
 
@@ -13,10 +14,9 @@ public interface AccountsService {
     String RemoveAccount(long accountID);
     AccountDTO GetAccount(long accountID, long userID);
     Set<AccountDTO> getAllAccountsOwnedByUser(long userID);
-    Set<AccountDTO> GetAll();
     AccountDTO getById(long accountID);
     AccountDTO updateAccount(AccountDTO accountDTO);
-    String GetAccountOwnerName(AccountDTO account);
+    CashUserDTO GetAccountOwner(AccountDTO account);
     AccountDTO createAccount(AccountDTO accountDTO);
 
     List<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID);
