@@ -2,13 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>AWBD Auction</title>
+    <title>members</title>
 
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css"/>
-
     <style>
         body {
             background-color: #f8f9fa;
@@ -49,6 +48,7 @@
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/home}"><span th:text="CashMate"></span>!</a>
@@ -79,29 +79,34 @@
         </div>
     </div>
 </nav>
+
 <div class="container">
-    <table class="table table-hover ">
-        <thead class="thead-inverse">
+    <h1>Members</h1>
+
+    <a th:href="@{'/accounts/members/addMember/' + ${accountID}}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Member
+    </a>
+
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
-            <th>Owner ID</th>
-            <th></th>
-            <th></th>
+            <th>Actions</th>
         </tr>
         </thead>
-        <tr th:each="account, stat : ${accounts}"
-            th:class="${stat.odd}? 'table-light':''">
-            <td th:text="${account.id}">1</td>
-            <td th:text="${account.name}">Account 1</td>
-            <td th:text="${account.ownerName}">Owner 1</td>
-            <td><a href="#" th:href="@{'/accounts/edit/' + ${account.id}}"><i class="fa-solid fa-pen"></i></a></td>
-            <td><a href="#" th:href="@{'/accounts/members/' + ${account.id}}"><i class="fa-solid fa-people-arrows"></i></a></td>
-            <td><a href="#" th:href="@{'/accounts/delete/' + ${account.id}}"><i class="fa-solid fa-trash"></i></a></td>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.name}"></td>
+            <td>
+                <a th:href="@{'/accounts/members/deleteMember/' + ${accountID} + '/' + ${member.id}}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
         </tr>
-
+        </tbody>
     </table>
 </div>
+
 
 </body>
 </html>

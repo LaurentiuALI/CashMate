@@ -16,11 +16,12 @@ public class AccountGeneralChecks {
         this.userAccountRepository = userAccountRepository;
     }
 
-    public void CheckAccountValidity(long accountID) {
+    public Account CheckAccountValidity(long accountID) {
         Account account = accountRepository.findById(accountID).orElse(null);
         if (account == null) {
             throw new RuntimeException("Account not found!");
         }
+        return account;
     }
 
     public void CheckUserAdministratorAuthorityOnAccount(long accountID, long userID) {

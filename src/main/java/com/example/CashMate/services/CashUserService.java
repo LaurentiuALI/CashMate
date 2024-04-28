@@ -6,7 +6,9 @@ import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
+import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,4 +22,6 @@ public interface CashUserService {
     CashUserDTO createAccount(CashUserDTO cashUserDTO);
 
     List<CashUser> getAll();
+
+    CashUserDTO existsByName(String name);
 }

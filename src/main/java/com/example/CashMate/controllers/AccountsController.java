@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -60,14 +61,14 @@ public class AccountsController {
     public String UpdateAccount(Model model, @PathVariable long id) {
         AccountDTO account = accountsService.getById(id);
         model.addAttribute("account", account);
-        return "AccountForm";
+        return "accountForm";
     }
 
     @RequestMapping("/add")
     public String CreateAccount(Model model) {
         AccountDTO account = new AccountDTO();
         model.addAttribute("account", account);
-        return "AccountAdd";
+        return "accountAdd";
     }
 
     @PostMapping({"/", ""})
@@ -84,14 +85,38 @@ public class AccountsController {
         return "redirect:/accounts";
     }
 
-    @PostMapping("/add_member")
-    public ResponseEntity<String> AddAccountMember(@RequestBody long accountID, long ownerID, long userID) {
-        try {
-            accountsService.AddAccountMember(accountID, ownerID, userID);
-            return ResponseEntity.ok("User added to account successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @RequestMapping("/members/{accountID}")
+    public String GetAccountMembers(Model model, @PathVariable long accountID) {
+        List<CashUserDTO> members = accountsService.GetAccountMembers(accountID);
+        model.addAttribute("members", members);
+        model.addAttribute("accountID", accountID);
+        return "members";
+    }
+
+
+    @RequestMapping("/members/addMember/{accountID}")
+    public String AddAccountMemberSelectionPanel(Model model, @PathVariable long accountID) {
+        String userName = "";
+        model.addAttribute("accountID", accountID);
+        model.addAttribute("userName", userName);
+        return "addMember";
+    }
+
+    @PostMapping("/members/addMember/{accountID}")
+    public String AddAccountMember(@RequestParam("userName") String userName, @PathVariable long accountID) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
+        CashUserDTO userToAdd = cashUserService.existsByName(userName);
+        accountsService.AddAccountMember(accountID, loggedUser.getId(), userToAdd.getId());
+        return "redirect:/accounts/members/" + accountID;
+    }
+
+    @RequestMapping("/members/deleteMember/{accountID}/{memberID}")
+    public String RemoveAccountMember(@PathVariable long accountID, @PathVariable long memberID) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
+        accountsService.RemoveAccountMember(accountID, loggedUser.getId(), memberID);
+        return "redirect:/accounts/members/" + accountID;
     }
 
     @PostMapping("/remove_member")

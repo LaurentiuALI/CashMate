@@ -13,4 +13,7 @@ public interface UserAccountRepository extends CrudRepository<UserAccount, UserA
 
 //    @Query("SELECT DISTINCT userAccount FROM UserAccount userAccount")
     List<UserAccount> findAll();
+
+    @Query("SELECT userAccount.id.user_id FROM UserAccount userAccount WHERE userAccount.id.account_id = ?1")
+    List<Long> findUserIDByAccountId(long accountID);
 }

@@ -30,7 +30,7 @@ INSERT INTO user_account (user_id, account_id) VALUES
                                                    (7, 1), (7, 2), (7, 3), (7, 4);
 
 -- Inserare în tabelul category
-INSERT INTO category (name, DESCRIPTION) VALUES
+INSERT INTO category (name, description) VALUES
                                              ('Food', 'Expenses related to food purchases'),
                                              ('Transportation', 'Expenses related to transportation'),
                                              ('Utilities', 'Expenses related to utility bills'),

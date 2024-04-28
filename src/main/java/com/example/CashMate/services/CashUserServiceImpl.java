@@ -100,5 +100,14 @@ public class CashUserServiceImpl implements CashUserService{
         return updatedUser;
     }
 
+    @Override
+    public CashUserDTO existsByName(String name){
+        CashUser user = cashUserRepository.findByName(name).get(0);
+        if (user == null){
+            throw new RuntimeException("User not found!");
+        }
+        return modelMapper.map(user, CashUserDTO.class);
+    }
+
 
 }

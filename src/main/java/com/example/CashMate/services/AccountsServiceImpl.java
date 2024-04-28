@@ -3,13 +3,16 @@ package com.example.CashMate.services;
 import com.example.CashMate.data.*;
 import com.example.CashMate.data.security.CashUser;
 import com.example.CashMate.dtos.AccountDTO;
+import com.example.CashMate.dtos.CashUserDTO;
 import com.example.CashMate.repositories.AccountRepository;
 import com.example.CashMate.repositories.security.CashUserRepository;
 import com.example.CashMate.repositories.TransactionRepository;
 import com.example.CashMate.repositories.UserAccountRepository;
+import com.example.CashMate.util.AccountGeneralChecks;
 import com.example.CashMate.util.UserGeneralChecks;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,7 @@ public class AccountsServiceImpl implements AccountsService{
     UserAccountRepository userAccountRepository;
     CashUserRepository cashUserRepository;
     TransactionRepository transactionRepository;
+    AccountGeneralChecks accountGeneralChecks;
 
     ModelMapper modelMapper;
 
@@ -40,12 +44,14 @@ public class AccountsServiceImpl implements AccountsService{
                                UserAccountRepository userAccountRepository,
                                CashUserRepository cashUserRepository,
                                TransactionRepository transactionRepository,
+                               AccountGeneralChecks accountGeneralChecks,
                                ModelMapper modelMapper) {
         this.userGeneralChecks = userGeneralChecks;
         this.accountRepository = accountRepository;
         this.userAccountRepository = userAccountRepository;
         this.cashUserRepository = cashUserRepository;
         this.transactionRepository = transactionRepository;
+        this.accountGeneralChecks = accountGeneralChecks;
         this.modelMapper = modelMapper;
     }
 
@@ -76,12 +82,24 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
     @Override
+    public List<CashUserDTO> GetAccountMembers(long accountID) {
+        Account account = accountGeneralChecks.CheckAccountValidity(accountID);
+        List <Long> userAccountIDs = userAccountRepository.findUserIDByAccountId(accountID);
+        List <CashUser> userAccounts = cashUserRepository.findAllById(userAccountIDs);
+        return userAccounts.stream().map(cashUser -> modelMapper.map(cashUser, CashUserDTO.class)).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
     public String AddAccountMember(long accountID, long ownerID, long userID) {
+        System.out.println("AccountID" + accountID + "OwnerID" + ownerID + "UserID" + userID);
         userGeneralChecks.userValidityCheck(userID);
         userGeneralChecks.userValidityCheck(ownerID);
         CheckUserAuthorityOnAccount(accountID, ownerID);
         UserAccountId userAccountId = new UserAccountId(accountID, userID);
-        UserAccount userAccount = new UserAccount(userAccountId);
+        CashUser cashUser = cashUserRepository.findById(userID).get();
+        Account account = accountRepository.findById(accountID).get();
+        UserAccount userAccount = new UserAccount(userAccountId, cashUser, account);
         userAccountRepository.save(userAccount);
         return "User added to account successfully";
     }

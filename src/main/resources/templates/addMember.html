@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>AWBD Auction</title>
+    <title>Add Member</title>
 
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
@@ -79,28 +79,26 @@
         </div>
     </div>
 </nav>
-<div class="container">
-    <table class="table table-hover ">
-        <thead class="thead-inverse">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Owner ID</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tr th:each="account, stat : ${accounts}"
-            th:class="${stat.odd}? 'table-light':''">
-            <td th:text="${account.id}">1</td>
-            <td th:text="${account.name}">Account 1</td>
-            <td th:text="${account.ownerName}">Owner 1</td>
-            <td><a href="#" th:href="@{'/accounts/edit/' + ${account.id}}"><i class="fa-solid fa-pen"></i></a></td>
-            <td><a href="#" th:href="@{'/accounts/members/' + ${account.id}}"><i class="fa-solid fa-people-arrows"></i></a></td>
-            <td><a href="#" th:href="@{'/accounts/delete/' + ${account.id}}"><i class="fa-solid fa-trash"></i></a></td>
-        </tr>
-
-    </table>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" th:action="@{'/accounts/members/addMember/' + ${accountID}}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="text-center">Add member</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <input class="form-control" id="userName" name="userName" type="text" placeholder="User name"/>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-success my-2" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 </body>
