@@ -45,6 +45,22 @@
         .navbar-nav .nav-item {
             margin: 0 20px;
         }
+        .pagination .page-link {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #fff;
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #f8f9fa;
+            border-color: #28a745;
+            color: #28a745;
+        }
     </style>
 
 </head>
@@ -111,7 +127,31 @@
                 <p class="card-text transaction-description" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
             </div>
         </div>
+
+        <nav aria-label="Page navigation" th:if="${transactions != null and transactions.totalElements != 0}" class="text-center mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:class="${transactions.first} ? 'disabled' : '' ">
+                    <a class="page-link" th:href="@{${'/transactions?page=' + (transactions.number - 1) + '&size=' + transactions.size + '&accountId=' + accountId}}">
+                        Previous
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, transactions.totalPages - 1)}"
+                    th:class="${transactions.number == pageNumber ? 'active' : ''}">
+                    <a class="page-link" th:href="@{${'/transactions?page=' + pageNumber + '&size=' + transactions.size + '&accountId=' + accountId}}" th:text="${pageNumber + 1}">1</a>
+                </li>
+                <li class="page-item" th:class="${transactions.last ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{${'/transactions?page=' +  (transactions.number + 1) + '&size=' + transactions.size + '&accountId=' + accountId}}">
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+
     </div>
+
+
 </div>
 
 </div>

@@ -3,6 +3,7 @@ package com.example.CashMate.services;
 import com.example.CashMate.data.Category;
 import com.example.CashMate.data.Recursion;
 import com.example.CashMate.data.Transaction;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public interface TransactionsService {
     Optional<Transaction> GetTransactionsByID(long transactionID);
     Transaction GetTransactionsByUserID(long userID);
     Set<Transaction> getTransactionsByAccountID(long accountID);
+    Page<Transaction> findAllTransactions(int page, int size, long accountId);
     List<Transaction> GetAllTransactions();
     Category GetCategoryByID(long categoryID);
     Category GetCategoryByTransactionID(long transactionID);

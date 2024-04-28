@@ -1,6 +1,8 @@
 package com.example.CashMate.repositories;
 
 import com.example.CashMate.data.Account;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

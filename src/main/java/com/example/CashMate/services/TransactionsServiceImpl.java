@@ -7,6 +7,9 @@ import com.example.CashMate.util.UserGeneralChecks;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +44,13 @@ public class TransactionsServiceImpl implements TransactionsService{
         this.categoryRepository = categoryRepository;
         this.recursionRepository = recursionRepository;
         this.accountRepository = accountRepository;
+    }
+
+    @Override
+    public Page<Transaction> findAllTransactions(int page, int size, long accountId) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return transactionRepository.findAllByAccount_Id(pageable, accountId);
     }
 
     @Override
