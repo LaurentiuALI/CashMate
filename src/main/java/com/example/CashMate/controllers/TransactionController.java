@@ -64,9 +64,6 @@ public class TransactionController {
         Set<Transaction> transactions = transactionsService.getTransactionsByAccountID(accountId);
         model.addAttribute("transactions", transactions);
 
-        transactions.forEach(transaction -> {
-            System.out.println(transaction.getType());
-        });
         return "transactionList";
     }
 
