@@ -47,8 +47,6 @@ public class TransactionController {
 
         List<AccountDTO> allAccounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
 
-        allAccounts.forEach(System.out::println);
-
         model.addAttribute("accounts", allAccounts);
 
         return "transactionList";
@@ -57,10 +55,19 @@ public class TransactionController {
     @PostMapping({"/", ""})
     public String getTransactionsByAccountName(@RequestParam("accountId") Long accountId, Model model) {
 
-        System.out.println("hello??");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
+        List<AccountDTO> allAccounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
+
+        model.addAttribute("accounts", allAccounts);
+
         Set<Transaction> transactions = transactionsService.getTransactionsByAccountID(accountId);
         model.addAttribute("transactions", transactions);
-        return "transactionList2";
+
+        transactions.forEach(transaction -> {
+            System.out.println(transaction.getType());
+        });
+        return "transactionList";
     }
 
 

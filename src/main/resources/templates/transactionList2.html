@@ -88,6 +88,20 @@
         </ul>
     </div>
 
+    <div class="card" th:each="transaction : ${transactions}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title transaction-name" th:text="${transaction.name}">Transaction Name</h5>
+            <p class="card-text transaction-id th:text="${transaction.id}"">ID: 12345</p>
+        </div>
+        <div class="card-body">
+            <p class="card-text transaction-description" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p class="card-text transaction-amount" th:text="${transaction.amount}"><strong>$100.00 USD</strong></p>
+            <p class="card-text transaction-date" th:text="${transaction.date}">Date: January 1, 2024</p>
+            <p class="card-text transaction-currency" th:text="${transaction.type}">Currency: USD</p>
+        </div>
+    </div>
+
+
 
 </div>
 </body>
