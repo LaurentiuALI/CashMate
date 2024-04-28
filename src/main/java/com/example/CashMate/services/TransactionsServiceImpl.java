@@ -96,9 +96,16 @@ public class TransactionsServiceImpl implements TransactionsService{
     }
 
     @Override
-    public Set<Transaction> GetTransactionsByAccountID(long accountID, long userID) {
-        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(accountID, userID);
-        return accountRepository.findById(accountID).get().getTransactions();
+    public Set<Transaction> getTransactionsByAccountID(long accountID) {
+
+        Optional<Account> accountOpt = accountRepository.findById(accountID);
+        if(accountOpt.isPresent()){
+            Account account = accountOpt.get();
+
+            return account.getTransactions();
+
+        }
+        return null;
     }
 
     @Override
