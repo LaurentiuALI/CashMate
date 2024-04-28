@@ -157,7 +157,7 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
     @Override
-    public Set<AccountDTO> GetAllAccountsByUser(long userID) {
+    public Set<AccountDTO> getAllAccountsOwnedByUser(long userID) {
         userGeneralChecks.userValidityCheck(userID);
         Set<Account> accounts = Objects.requireNonNull(cashUserRepository.findById(userID).orElse(null)).getAccounts();
         if (accounts == null){
@@ -176,6 +176,18 @@ public class AccountsServiceImpl implements AccountsService{
 
         return accounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toSet());
 
+    }
+
+    @Override
+    public List<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID){
+
+        Optional<CashUser> user = cashUserRepository.findById(userID);
+
+        List<Account> participantAccounts = userAccountRepository.findAccountsByUserId(userID);
+
+        user.ifPresent(cashUser -> participantAccounts.addAll(cashUser.getAccounts()));
+
+        return participantAccounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toList());
     }
 
 

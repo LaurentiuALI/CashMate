@@ -17,7 +17,7 @@ public interface TransactionsService {
     String RemoveRecursion(long userID, long accountID, long recursionID);
     Optional<Transaction> GetTransactionsByID(long transactionID);
     Transaction GetTransactionsByUserID(long userID);
-    Set<Transaction> GetTransactionsByAccountID(long accountID, long userID);
+    Set<Transaction> getTransactionsByAccountID(long accountID);
     List<Transaction> GetAllTransactions();
     Category GetCategoryByID(long categoryID);
     Category GetCategoryByTransactionID(long transactionID);

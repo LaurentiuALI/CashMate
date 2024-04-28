@@ -41,7 +41,7 @@ public class AccountsController {
 
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
 
-        Set<AccountDTO> accounts = accountsService.GetAllAccountsByUser(loggedUser.getId());
+        Set<AccountDTO> accounts = accountsService.getAllAccountsOwnedByUser(loggedUser.getId());
         for(AccountDTO account: accounts){
             account.setOwnerName(accountsService.GetAccountOwnerName(account));
         }
@@ -141,7 +141,7 @@ public class AccountsController {
     @GetMapping("/user_accounts")
     public ResponseEntity<Set<AccountDTO>> GetAllAccountsByUser(@RequestHeader long userID) {
         try {
-            return ResponseEntity.ok(accountsService.GetAllAccountsByUser(userID));
+            return ResponseEntity.ok(accountsService.getAllAccountsOwnedByUser(userID));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
