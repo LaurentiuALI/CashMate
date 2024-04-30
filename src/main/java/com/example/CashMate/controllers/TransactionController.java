@@ -4,6 +4,7 @@ package com.example.CashMate.controllers;
 import com.example.CashMate.data.Transaction;
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
+import com.example.CashMate.dtos.TransactionDTO;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
 import com.example.CashMate.services.TransactionsService;
@@ -14,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -37,6 +35,21 @@ public class TransactionController {
         this.cashUserService = cashUserService;
         this.accountsService = accountsService;
         this.transactionsService = transactionsService;
+    }
+
+    @PostMapping({"/add", "/add/"})
+    public String addTransaction(Model model, @ModelAttribute TransactionDTO transaction){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
+        List<AccountDTO> allAccounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
+
+        model.addAttribute("accounts", allAccounts);
+
+        System.out.println(transaction);
+
+
+        return "redirect:/transactions";
     }
 
     @RequestMapping({"/", ""})
