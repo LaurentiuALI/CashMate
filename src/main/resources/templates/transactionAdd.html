@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Transaction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 70%;
+            max-width: 400px;
+        }
+        .form-group {
+            margin-bottom: 10px; /* Reduce margin */
+        }
+        .form-label {
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-control {
+            background-color: #f8f9fa;
+            border-color: #28a745;
+            color: #495057;
+            font-size: 14px;
+            width: 100%;
+            padding: 8px; /* Reduce padding */
+        }
+        .btn-primary {
+            background-color: #218838;
+            border-color: #218838;
+            font-size: 14px;
+            padding: 8px 20px;
+        }
+        .btn-primary:hover {
+            background-color: #1e7e34;
+            border-color: #1c7430;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4 text-white text-center">Add New Transaction</h1>
+    <form action="/addTransaction" method="POST">
+        <div class="form-group">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="amount" class="form-label">Amount:</label>
+            <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="type" class="form-label">Type:</label>
+            <select class="form-control" id="type" name="type" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="account" class="form-label">Account:</label>
+            <select class="form-control" id="account" name="account" required>
+                <!-- Populate with account options using Thymeleaf -->
+                <option th:each="account : ${accounts}" th:value="${account.id}" th:text="${account.name}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="date" class="form-label">Date:</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add Transaction</button>
+    </form>
+</div>
+</body>
+</html>

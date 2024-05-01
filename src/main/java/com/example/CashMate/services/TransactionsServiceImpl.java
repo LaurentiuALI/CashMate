@@ -1,12 +1,14 @@
 package com.example.CashMate.services;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.dtos.TransactionDTO;
 import com.example.CashMate.repositories.*;
 import com.example.CashMate.util.AccountGeneralChecks;
 import com.example.CashMate.util.UserGeneralChecks;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,8 @@ public class TransactionsServiceImpl implements TransactionsService{
     RecursionRepository recursionRepository;
     AccountRepository accountRepository;
 
+    private ModelMapper modelMapper;
+
     public TransactionsServiceImpl(
             UserGeneralChecks userGeneralChecks,
             AccountGeneralChecks accountGeneralChecks,
@@ -36,7 +40,8 @@ public class TransactionsServiceImpl implements TransactionsService{
             TransactionCategoryRepository transactionCategoryRepository,
             CategoryRepository categoryRepository,
             RecursionRepository recursionRepository,
-            AccountRepository accountRepository) {
+            AccountRepository accountRepository,
+            ModelMapper modelMapper) {
         this.userGeneralChecks = userGeneralChecks;
         this.accountGeneralChecks = accountGeneralChecks;
         this.transactionRepository = transactionRepository;
@@ -44,6 +49,7 @@ public class TransactionsServiceImpl implements TransactionsService{
         this.categoryRepository = categoryRepository;
         this.recursionRepository = recursionRepository;
         this.accountRepository = accountRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -54,10 +60,35 @@ public class TransactionsServiceImpl implements TransactionsService{
     }
 
     @Override
-    public String CreateTransaction(Transaction transaction, long userID) {
-        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount().getId(), userID);
+    public Optional<Transaction> getTransactionsByID(long transactionID) {
+        return transactionRepository.findById(transactionID);
+    }
+
+    @Override
+    public TransactionDTO createTransaction(TransactionDTO transactionDTO) throws Exception {
+
+        Transaction transaction = new Transaction();
+
+        Optional<Account> account = accountRepository.findById(transactionDTO.getAccount_id());
+        if(account.isPresent()){
+            transaction.setAccount( account.get() );
+        }else{
+            throw new Exception("Cannot save transaction. Account not found.");
+        }
+
+        transaction.setName(transactionDTO.getName());
+        transaction.setDescription(transactionDTO.getDescription());
+        transaction.setAmount(transactionDTO.getAmount());
+        transaction.setType(transactionDTO.getType());
+        transaction.setDate(transactionDTO.getDate());
+
         transactionRepository.save(transaction);
-        return "Transaction created successfully";
+        return modelMapper.map(transaction, TransactionDTO.class);
+    }
+
+    @Override
+    public void removeTransaction(long transactionID) {
+       transactionRepository.deleteById(transactionID);
     }
 
     @Override
@@ -66,14 +97,6 @@ public class TransactionsServiceImpl implements TransactionsService{
         accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount().getId(), userID);
         entityManager.persist(transaction);
         return "Account updated successfully";
-    }
-
-    @Override
-    public String RemoveTransaction(long userID, long accountID, long transactionID) {
-        accountGeneralChecks.CheckUserMemberAuthorityOnAccount(accountID, userID);
-        transactionRepository.deleteById(transactionID);
-        return "Transaction removed successfully";
-
     }
 
     @Override
@@ -95,10 +118,6 @@ public class TransactionsServiceImpl implements TransactionsService{
         return "Recursion removed successfully";
     }
 
-    @Override
-    public Optional<Transaction> GetTransactionsByID(long transactionID) {
-        return transactionRepository.findById(transactionID);
-    }
 
     @Override
     public Transaction GetTransactionsByUserID(long userID) {
