@@ -1,5 +1,6 @@
 package com.example.CashMate.dtos;
 
+import com.example.CashMate.data.Category;
 import com.example.CashMate.data.Recursion;
 import com.example.CashMate.data.Type;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -24,4 +26,5 @@ public class TransactionDTO {
     private Type type;
     private Recursion recursion;
 
+    private List<Category> categoriesList;
 }

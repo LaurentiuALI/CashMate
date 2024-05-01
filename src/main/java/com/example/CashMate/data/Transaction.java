@@ -47,7 +47,7 @@ public class Transaction {
                 ", amount=" + amount +
                 ", date=" + date +
                 ", type=" + type +
-                ", recursion=" + recursion.getId() +
+                ", recursion=" + (recursion != null ? recursion.getId() : "null") +
                 '}';
     }
 

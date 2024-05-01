@@ -170,7 +170,7 @@
 
     <div class="m-4">
         <h2>Transactions</h2>
-        <form method="post" th:action="@{/transactions}">
+        <form method="get" th:action="@{/transactions}">
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle btn-success" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Select Account
@@ -193,7 +193,13 @@
 
                 <p class="card-text transaction-amount text-white fs-2 mb-0 fw-semibold" th:text="${transaction.amount} + ' $'"><strong>$100.00 USD</strong></p>
                 <p class="card-text transaction-date text-white fs-2 mb-0 " th:text="${#dates.format(transaction.date, 'dd-MM-yyyy')}">Date: January 1, 2024</p>
+                <div class="category-container d-flex">
+                    <div th:each="category : ${categoriesMap[transaction.id]}">
+                        <div class="badge me-2" style="background-color: #66B9E3" th:text="${category.name}">Category</div>
+                    </div>
+                </div>
                 <td><a  th:href="@{'/transactions/delete/' + ${transaction.id}}"><i class="color-element text-white fs-3 fa-solid fa-trash"></i></a></td>
+
             </div>
             <div class="card-body">
                 <p class="card-text transaction-description" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>

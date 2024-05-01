@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionsServiceImpl implements TransactionsService{
@@ -92,6 +93,35 @@ public class TransactionsServiceImpl implements TransactionsService{
     }
 
     @Override
+    public List<Category> getCategoriesByTransactionId(long transactionID){
+        List<TransactionCategory> transactionCategories = transactionCategoryRepository.findByTransactionId(transactionID);
+        return transactionCategories.stream().map(TransactionCategory::getCategory).collect(Collectors.toList());
+    }
+
+    @Override
+    public void addCategoriesToTransaction(long transactionID, List<Long> categoriesID){
+        Optional<Transaction> transactionDTO = transactionRepository.findById(transactionID);
+
+        if(transactionDTO.isPresent()){
+
+            Transaction transaction = transactionDTO.get();
+
+            for(long categoryId: categoriesID){
+                Optional<Category> categoryDTO = categoryRepository.findById(categoryId);
+                if(categoryDTO.isPresent()){
+                    Category category = categoryDTO.get();
+
+                    TransactionCategoryId transactionCategoryId = new TransactionCategoryId(transaction.getId(), category.getId());
+
+                    TransactionCategory transactionCategory = new TransactionCategory(transactionCategoryId, transaction, category);
+
+                    transactionCategoryRepository.save(transactionCategory);
+                }
+            }
+        }
+    }
+
+    @Override
     @Transactional
     public String UpdateTransaction(Transaction transaction, long userID){
         accountGeneralChecks.CheckUserMemberAuthorityOnAccount(transaction.getAccount().getId(), userID);
@@ -147,28 +177,12 @@ public class TransactionsServiceImpl implements TransactionsService{
         return categoryRepository.findById(categoryID).get();
     }
 
-    @Override
-    public Category GetCategoryByTransactionID(long transactionID) {
-        TransactionCategory transactionCategory = transactionCategoryRepository.findByTransactionId(transactionID);
-        return transactionCategory.getCategory();
-    }
 
     @Override
     public List<Category> GetAllCategories() {
         return categoryRepository.findAll();
     }
 
-    @Override
-    public List<Category> GetAllCategoriesByAccountID(long accountID) {
-        Account account = accountRepository.findById(accountID).get();
-        List<Transaction> transactions = (List<Transaction>) account.getTransactions();
-        List<Category> categories = null;
-        for (Transaction transaction : transactions) {
-            TransactionCategory transactionCategory = transactionCategoryRepository.findByTransactionId(transaction.getId());
-            categories.add(transactionCategory.getCategory());
-        }
-        return categories;
-    }
 
     @Override
     public List<Recursion> GetRecursionsByAccountID(long accountID) {

@@ -11,20 +11,21 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface TransactionsService {
+    Page<Transaction> findAllTransactions(int page, int size, long accountId);
+    Optional<Transaction> getTransactionsByID(long transactionID);
     TransactionDTO createTransaction(TransactionDTO transaction) throws Exception;
-    String UpdateTransaction(Transaction transaction, long userID);
+    List<Category> getCategoriesByTransactionId(long transactionID);
+    void addCategoriesToTransaction(long transactionID, List<Long> categoriesID);
     void removeTransaction(long transactionID);
+
+    String UpdateTransaction(Transaction transaction, long userID);
     String CreateRecursion(Recursion recursion, long userID);
     String UpdateRecursion(Recursion recursion);
     String RemoveRecursion(long userID, long accountID, long recursionID);
-    Optional<Transaction> getTransactionsByID(long transactionID);
     Transaction GetTransactionsByUserID(long userID);
     Set<Transaction> getTransactionsByAccountID(long accountID);
-    Page<Transaction> findAllTransactions(int page, int size, long accountId);
     List<Transaction> GetAllTransactions();
     Category GetCategoryByID(long categoryID);
-    Category GetCategoryByTransactionID(long transactionID);
     List<Category> GetAllCategories();
-    List<Category> GetAllCategoriesByAccountID(long accountID);
     List<Recursion> GetRecursionsByAccountID(long accountID);
 }
