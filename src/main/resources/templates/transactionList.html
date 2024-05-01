@@ -132,6 +132,23 @@
                             <option th:each="account : ${accounts}" th:value="${account.id}" th:text="${account.name}"></option>
                         </select>
                     </div>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Categories
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li th:each="category : ${categories}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:id="'category-' + ${category.id}" th:name="'categories'" th:value="${category.id}">
+                                    <label class="form-check-label" th:for="'category-' + ${category.id}" th:text="${category.name}">
+                                        Category Name
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
                     <div class="mb-3">
                         <label for="date" class="form-label">Date</label>
                         <input type="date" class="form-control" id="date" name="date" required>

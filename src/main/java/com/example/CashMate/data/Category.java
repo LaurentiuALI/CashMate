@@ -18,6 +18,9 @@ public class Category {
     @Column(name="name")
     private String name;
 
+    @Column(name="description")
+    private String description;
+
     public Category(Long id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -73,8 +76,5 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Column(name="description")
-    private String description;
 
 }

@@ -9,6 +9,7 @@ import com.example.CashMate.dtos.CashUserDTO;
 import com.example.CashMate.dtos.TransactionDTO;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
+import com.example.CashMate.services.CategoryService;
 import com.example.CashMate.services.TransactionsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,15 @@ public class TransactionController {
     CashUserService cashUserService;
     AccountsService accountsService;
     TransactionsService transactionsService;
+    CategoryService categoryService;
 
     @Autowired
     public TransactionController(CashUserService cashUserService, AccountsService accountsService,
-                                 TransactionsService transactionsService) {
+                                 TransactionsService transactionsService, CategoryService categoryService) {
         this.cashUserService = cashUserService;
         this.accountsService = accountsService;
         this.transactionsService = transactionsService;
+        this.categoryService = categoryService;
     }
 
     @RequestMapping({"/", ""})
@@ -60,6 +63,8 @@ public class TransactionController {
             model.addAttribute("accountId", accountId);
         }
 
+        model.addAttribute("categories", categoryService.findAll());
+
         return "transactionList";
     }
 
@@ -80,6 +85,7 @@ public class TransactionController {
         model.addAttribute("transactions", transactions);
 
 
+        model.addAttribute("categories", categoryService.findAll());
 
         return "transactionList";
     }
@@ -91,6 +97,7 @@ public class TransactionController {
                                  @RequestParam("type") Type type,
                                  @RequestParam("account") Long accountId,
                                  @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                                 @RequestParam(value = "categories", required = false) List<Long> selectedCategories,
                                  Model model) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -113,6 +120,8 @@ public class TransactionController {
         transaction.setAmount(amount);
         transaction.setType(type);
         transaction.setDate(date);
+
+        selectedCategories.forEach(System.out::println);
 
         try {
             transactionsService.createTransaction(transaction);
