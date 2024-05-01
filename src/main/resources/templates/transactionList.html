@@ -45,21 +45,19 @@
         .navbar-nav .nav-item {
             margin: 0 20px;
         }
-        .pagination .page-link {
-            background-color: #28a745;
-            color: #fff;
-        }
+        /*.pagination .page-link {*/
+        /*    background-color: #28a745;*/
+        /*    color: #fff;*/
+        /*}*/
 
-        .pagination .page-item.active .page-link {
-            background-color: #fff;
-            border-color: #fff;
-            color: #fff;
-        }
+        /*.pagination .page-item.active .page-link {*/
+        /*    background-color: #fff;*/
+        /*    border-color: #fff;*/
+        /*    color: #fff;*/
+        /*}*/
 
         .pagination .page-link:hover {
-            background-color: #f8f9fa;
-            border-color: #28a745;
-            color: #28a745;
+            opacity: 75%;
         }
     </style>
 
@@ -167,7 +165,7 @@
                 </ul>
             </div>
         </form>
-        <div class="card m-4" th:each="transaction : ${transactions}">
+        <div class="card mt-2" th:each="transaction : ${transactions}">
             <div  th:class="${#strings.equals(transaction.type, 'EXPENSE')} ? 'bg-danger card-header d-flex justify-content-between align-items-center align-text-bottom' : 'bg-success card-header d-flex justify-content-between align-items-center'">
                 <div class="d-flex justify-content-center align-items-center">
                     <i th:if="${#strings.equals(transaction.type, 'INCOME')}" class="fas fa-piggy-bank fs-2 text-white me-3"></i>
@@ -177,7 +175,8 @@
                 </div>
 
                 <p class="card-text transaction-amount text-white fs-2 mb-0 fw-semibold" th:text="${transaction.amount} + ' $'"><strong>$100.00 USD</strong></p>
-                <p class="card-text transaction-date text-white fs-2 mb-0 " th:text="${#dates.format(transaction.date, 'dd-MM-yyyy HH:mm')}">Date: January 1, 2024</p>
+                <p class="card-text transaction-date text-white fs-2 mb-0 " th:text="${#dates.format(transaction.date, 'dd-MM-yyyy')}">Date: January 1, 2024</p>
+                <td><a  th:href="@{'/transactions/delete/' + ${transaction.id}}"><i class="color-element text-white fs-3 fa-solid fa-trash"></i></a></td>
             </div>
             <div class="card-body">
                 <p class="card-text transaction-description" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -186,17 +185,17 @@
 
         <nav aria-label="Page navigation" th:if="${transactions != null and transactions.totalElements != 0}" class="text-center mt-4">
             <ul class="pagination justify-content-center">
-                <li class="page-item" th:class="${transactions.first} ? 'disabled' : '' ">
-                    <a class="page-link" th:href="@{${'/transactions?page=' + (transactions.number - 1) + '&size=' + transactions.size + '&accountId=' + accountId}}">
+                <li class="page-item" th:class="${transactions.first} ? 'disabled opacity-75' : '' ">
+                    <a class="page-link bg-success text-white" th:href="@{${'/transactions?page=' + (transactions.number - 1) + '&size=' + transactions.size + '&accountId=' + accountId}}">
                         Previous
                     </a>
                 </li>
                 <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, transactions.totalPages - 1)}"
                     th:class="${transactions.number == pageNumber ? 'active' : ''}">
-                    <a class="page-link" th:href="@{${'/transactions?page=' + pageNumber + '&size=' + transactions.size + '&accountId=' + accountId}}" th:text="${pageNumber + 1}">1</a>
+                    <a class="page-link bg-success text-white" th:href="@{${'/transactions?page=' + pageNumber + '&size=' + transactions.size + '&accountId=' + accountId}}" th:text="${pageNumber + 1}">1</a>
                 </li>
-                <li class="page-item" th:class="${transactions.last ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{${'/transactions?page=' +  (transactions.number + 1) + '&size=' + transactions.size + '&accountId=' + accountId}}">
+                <li class="page-item" th:class="${transactions.last ? 'disabled opacity-75' : ''}">
+                    <a class="page-link bg-success text-white table-hover" th:href="@{${'/transactions?page=' +  (transactions.number + 1) + '&size=' + transactions.size + '&accountId=' + accountId}}">
                         Next
                     </a>
                 </li>

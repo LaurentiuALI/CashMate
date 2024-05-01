@@ -21,5 +21,7 @@ public interface TransactionRepository extends PagingAndSortingRepository<Transa
 
     Optional<Transaction> delete(Transaction transaction);
 
-    void deleteById(long transactionID);
+    Optional<Transaction> deleteById(long transactionID);
+
+
 }

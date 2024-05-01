@@ -3,6 +3,7 @@ package com.example.CashMate.services;
 import com.example.CashMate.data.Category;
 import com.example.CashMate.data.Recursion;
 import com.example.CashMate.data.Transaction;
+import com.example.CashMate.dtos.TransactionDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -10,13 +11,13 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface TransactionsService {
-    String CreateTransaction(Transaction transaction, long userID);
+    TransactionDTO createTransaction(TransactionDTO transaction) throws Exception;
     String UpdateTransaction(Transaction transaction, long userID);
-    String RemoveTransaction(long userID, long accountID, long transactionID);
+    void removeTransaction(long transactionID);
     String CreateRecursion(Recursion recursion, long userID);
     String UpdateRecursion(Recursion recursion);
     String RemoveRecursion(long userID, long accountID, long recursionID);
-    Optional<Transaction> GetTransactionsByID(long transactionID);
+    Optional<Transaction> getTransactionsByID(long transactionID);
     Transaction GetTransactionsByUserID(long userID);
     Set<Transaction> getTransactionsByAccountID(long accountID);
     Page<Transaction> findAllTransactions(int page, int size, long accountId);
