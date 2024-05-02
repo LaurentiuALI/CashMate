@@ -46,6 +46,7 @@ public class AccountsController {
         }
         model.addAttribute("accounts", accounts);
         model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute("account", new AccountDTO());
 
 
         return "accountList";
