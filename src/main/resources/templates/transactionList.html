@@ -45,16 +45,6 @@
         .navbar-nav .nav-item {
             margin: 0 20px;
         }
-        /*.pagination .page-link {*/
-        /*    background-color: #28a745;*/
-        /*    color: #fff;*/
-        /*}*/
-
-        /*.pagination .page-item.active .page-link {*/
-        /*    background-color: #fff;*/
-        /*    border-color: #fff;*/
-        /*    color: #fff;*/
-        /*}*/
 
         .pagination .page-link:hover {
             opacity: 75%;
@@ -82,7 +72,7 @@
                     <a class="nav-link" th:href="@{'/accounts/add'}"><i class="fas fa-plus-circle"></i> Add New Account</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#addMemberModal"><i class="fas fa-plus"></i> Add New Transaction</a>
+                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#addTransactionModal"><i class="fas fa-plus"></i> Add New Transaction</a>
                 </li>
                 <form id="nav-item" th:action="@{/logout}" method="post">
                     <button type="nav-link" class="nav-link btn-primary">
@@ -94,11 +84,11 @@
     </div>
 </nav>
 
-<div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="addMemberModalLabel">Add New Transaction</h5>
+                <h5 class="modal-title" id="addTransactionModalLabel">Add New Transaction</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -114,7 +104,7 @@
                     <div class="row gx-3">
                         <div class="col">
                             <label for="amount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                            <input type="number" class="form-control" id="amount" name="amount" step="1.0" required>
                         </div>
                         <div class="col">
                             <label for="type" class="form-label">Type</label>
@@ -162,9 +152,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 <div class="container">
 

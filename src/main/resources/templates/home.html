@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome</title>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"/>
-  <!-- Font Awesome CSS -->
   <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
       background-color: #f8f9fa;
@@ -67,8 +66,8 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{'/accounts/add'}"><i class="fas fa-plus-circle"></i> Add New Account</a>
         </li>
-        <li class="nav-item" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
-          <a class="nav-link" href="#"><i class="fas fa-plus"></i> Add New Transaction</a>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addTransactionModal"><i class="fas fa-plus"></i> Add New Transaction</a>
         </li>
         <form id="nav-item" th:action="@{/logout}" method="post">
           <button type="nav-link" class="nav-link btn-primary">
@@ -81,8 +80,74 @@
 </nav>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-<script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+
+<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="addTransactionModalLabel">Add New Transaction</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form th:action="@{/transactions/add}" th:object="${transaction}" method="POST">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="row gx-3">
+            <div class="col">
+              <label for="amount" class="form-label">Amount</label>
+              <input type="number" class="form-control" id="amount" name="amount" step="1.0" required>
+            </div>
+            <div class="col">
+              <label for="type" class="form-label">Type</label>
+              <select class="form-select" id="type" name="type" required>
+                <option th:each="type : ${T(com.example.CashMate.data.Type).values()}"
+                        th:value="${type}" th:text="${type.getDescription()}"></option>
+              </select>
+            </div>
+
+          </div>
+          <div class="mb-3">
+            <label for="account" class="form-label">Account</label>
+            <select class="form-select" id="account" name="account" required>
+              <!-- Populate with account options using Thymeleaf -->
+              <option th:each="account : ${accounts}" th:value="${account.id}" th:text="${account.name}"></option>
+            </select>
+          </div>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              Select Categories
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+              <li th:each="category : ${categories}">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" th:id="'category-' + ${category.id}" th:name="'categories'" th:value="${category.id}">
+                  <label class="form-check-label" th:for="'category-' + ${category.id}" th:text="${category.name}">
+                    Category Name
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Transaction</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
