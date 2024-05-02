@@ -135,6 +135,9 @@
     <button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#addMemberModal">
         <i class="fas fa-plus-circle"></i> Add Member
     </button>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
 
     <table class="table table-striped">
         <thead>

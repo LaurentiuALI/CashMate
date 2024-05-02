@@ -1,7 +1,7 @@
 package com.example.CashMate.controllers;
 
 import com.example.CashMate.dtos.CashUserDTO;
-import com.example.CashMate.exceptions.ResourceAlreadyExistsException;
+import com.example.CashMate.exceptions.CashUserNotFoundException;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +39,8 @@ public class CashUserController {
         return "main";
     }
 
-    @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ModelAndView handleCashUserAlreadyExists(ResourceAlreadyExistsException exception) {
+    @ExceptionHandler(CashUserNotFoundException.class)
+    public ModelAndView handleCashUserAlreadyExists(CashUserNotFoundException exception) {
         ModelAndView modelAndView = new ModelAndView("register");
         modelAndView.addObject("error", exception.getMessage());
         modelAndView.addObject("user", new CashUserDTO()); // Add an empty user object if needed

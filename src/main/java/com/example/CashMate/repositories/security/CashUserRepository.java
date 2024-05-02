@@ -14,4 +14,5 @@ public interface CashUserRepository extends JpaRepository<CashUser, Long> {
     List<CashUser> findAll();
 
     List<CashUser> findByName(String name);
+
 }

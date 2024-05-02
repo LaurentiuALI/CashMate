@@ -3,7 +3,7 @@ package com.example.CashMate.services;
 import com.example.CashMate.data.security.Authority;
 import com.example.CashMate.data.security.CashUser;
 import com.example.CashMate.dtos.CashUserDTO;
-import com.example.CashMate.exceptions.ResourceAlreadyExistsException;
+import com.example.CashMate.exceptions.CashUserNotFoundException;
 import com.example.CashMate.repositories.security.AuthorityRepository;
 import com.example.CashMate.repositories.security.CashUserRepository;
 import org.junit.jupiter.api.Test;
@@ -64,7 +64,7 @@ public class CashUserServiceTest {
 
         when(cashUserRepository.findByName(existingUserDTO.getName())).thenReturn(List.of(new CashUser()));
 
-        assertThrows(ResourceAlreadyExistsException.class, () -> cashUserService.createAccount(existingUserDTO));
+        assertThrows(CashUserNotFoundException.class, () -> cashUserService.createAccount(existingUserDTO));
 
         verify(cashUserRepository, never()).save(any());
     }

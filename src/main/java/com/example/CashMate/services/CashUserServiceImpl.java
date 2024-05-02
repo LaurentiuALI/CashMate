@@ -5,7 +5,7 @@ import com.example.CashMate.data.security.Authority;
 import com.example.CashMate.data.security.CashUser;
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
-import com.example.CashMate.exceptions.ResourceAlreadyExistsException;
+import com.example.CashMate.exceptions.CashUserNotFoundException;
 import com.example.CashMate.repositories.AccountRepository;
 import com.example.CashMate.repositories.security.AuthorityRepository;
 import com.example.CashMate.repositories.security.CashUserRepository;
@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CashUserServiceImpl implements CashUserService{
@@ -77,7 +76,7 @@ public class CashUserServiceImpl implements CashUserService{
 
 
         if(!cashUserRepository.findByName(cashUserDTO.getName()).isEmpty()){
-            throw new ResourceAlreadyExistsException("The user with name " + cashUserDTO.getName() + " already exists.");
+            throw new CashUserNotFoundException("The user with name " + cashUserDTO.getName() + " already exists.");
         }
 
         Authority guestRole = authorityRepository.save(Authority.builder().role("ROLE_GUEST").build());

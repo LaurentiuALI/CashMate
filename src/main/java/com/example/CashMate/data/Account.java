@@ -23,14 +23,14 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 
-    public Set<Transaction> getTransactions() {
-        return transactions;
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", user_id=" + user_id +
+                '}';
     }
-
-    public void setTransactions(Set<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
 
     public Account(Long id, String name, Long user_id, Set<Transaction> transactions) {
         this.id = id;
@@ -42,13 +42,12 @@ public class Account {
     public Account() {
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", user_id=" + user_id +
-                '}';
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public Long getId() {

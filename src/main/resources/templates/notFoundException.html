@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Not Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #dc3545;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Resource Not Found</h1>
+    <p>We're sorry, but the requested resource could not be found.</p>
+    <p>Error: <span th:text="${exception.class.simpleName}"></span></p>
+    <p>Message: <span th:text="${exception.getMessage()}"></span></p>
+    <p>Please check the URL or try again later.</p>
+</div>
+</body>
+</html>

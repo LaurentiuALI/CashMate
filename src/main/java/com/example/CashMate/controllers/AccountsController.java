@@ -2,18 +2,21 @@ package com.example.CashMate.controllers;
 
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
+import com.example.CashMate.exceptions.AccountNotCreatedException;
+import com.example.CashMate.exceptions.CashUserNotFoundException;
+import com.example.CashMate.exceptions.ResourceNotFoundException;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import java.util.List;
 
 @Controller
 @RequestMapping("/accounts")
@@ -42,7 +45,7 @@ public class AccountsController {
 
         List<AccountDTO> accounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
         for(AccountDTO account: accounts){
-            account.setOwnerName(accountsService.GetAccountOwner(account).getName());
+            account.setOwnerName(accountsService.getAccountOwner(account).getName());
         }
         model.addAttribute("accounts", accounts);
         model.addAttribute("loggedUser", loggedUser);
@@ -54,7 +57,7 @@ public class AccountsController {
 
     @RequestMapping("/delete/{id}")
     public String RemoveAccount(@PathVariable long id) {
-        accountsService.RemoveAccount(id);
+        accountsService.removeAccount(id);
         return "redirect:/accounts";
     }
 
@@ -79,28 +82,34 @@ public class AccountsController {
 
         account.setUser_id(loggedUser.getId());
 
-        if(account.getId() != null)
+        if(account.getId() != null) {
             accountsService.updateAccount(account);
-        else
+        }else
             accountsService.createAccount(account);
         return "redirect:/accounts";
     }
 
     @RequestMapping("/members/{accountID}")
     public String GetAccountMembers(Model model, @PathVariable long accountID) {
-        List<CashUserDTO> members = accountsService.GetAccountMembers(accountID);
+        List<CashUserDTO> members = accountsService.getAccountMembers(accountID);
         model.addAttribute("members", members);
         model.addAttribute("accountID", accountID);
         return "members";
     }
 
-
     @PostMapping("/members/addMember/{accountID}")
-    public String AddAccountMember(@RequestParam("userName") String userName, @PathVariable long accountID) {
+    public String AddAccountMember(Model model, @RequestParam("userName") String userName, @PathVariable long accountID) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
-        CashUserDTO userToAdd = cashUserService.existsByName(userName);
-        accountsService.AddAccountMember(accountID, loggedUser.getId(), userToAdd.getId());
+        try{
+            accountsService.addAccountMember(accountID, loggedUser.getId(), userName);
+        } catch (CashUserNotFoundException ex){
+            List<CashUserDTO> members = accountsService.getAccountMembers(accountID);
+            model.addAttribute("members", members);
+            model.addAttribute("accountID", accountID);
+            model.addAttribute("error", ex.getMessage());
+            return "members";
+        }
         return "redirect:/accounts/members/" + accountID;
     }
 
@@ -108,37 +117,16 @@ public class AccountsController {
     public String RemoveAccountMember(@PathVariable long accountID, @PathVariable long memberID) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
-        accountsService.RemoveAccountMember(accountID, loggedUser.getId(), memberID);
+        accountsService.removeAccountMember(accountID, loggedUser.getId(), memberID);
         return "redirect:/accounts/members/" + accountID;
     }
 
-    @PostMapping("/remove_member")
-    public ResponseEntity<String> RemoveAccountMember(@RequestBody long accountID, long ownerID, long userID) {
-        try {
-            accountsService.RemoveAccountMember(accountID, ownerID, userID);
-            return ResponseEntity.ok("User removed from account successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @ExceptionHandler({ResourceNotFoundException.class, AccountNotCreatedException.class})
+    public ModelAndView handlerNotFoundException(Exception exception){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("notFoundException");
+        return modelAndView;
     }
-
-    @GetMapping("/account")
-    public ResponseEntity<AccountDTO> GetAccount(@RequestHeader long accountID, long userID) {
-        try {
-            return ResponseEntity.ok(accountsService.GetAccount(accountID, userID));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/user_accounts")
-    public ResponseEntity<Set<AccountDTO>> GetAllAccountsByUser(@RequestHeader long userID) {
-        try {
-            return ResponseEntity.ok(accountsService.getAllAccountsOwnedByUser(userID));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
 
 }
