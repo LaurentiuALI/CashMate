@@ -50,6 +50,23 @@
         .color-element {
             color: #28a745;
         }
+
+        .btn-primary {
+            --bs-btn-color: #fff;
+            --bs-btn-bg: #28a745;
+            --bs-btn-border-color: #28a745;
+            --bs-btn-hover-color: #fff;
+            --bs-btn-hover-bg: #1c5c2a;
+            --bs-btn-hover-border-color: #1c5c2a;
+            --bs-btn-focus-shadow-rgb: 49, 132, 253;
+            --bs-btn-active-color: #fff;
+            --bs-btn-active-bg: #1c5c2a;
+            --bs-btn-active-border-color: #1c5c2a;
+            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+            --bs-btn-disabled-color: #fff;
+            --bs-btn-disabled-bg: #28a745;
+            --bs-btn-disabled-border-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -85,6 +102,32 @@
 </nav>
 
 <div class="container">
+    <h1>List of Accounts</h1>
+    <div class="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createAccountModalLabel">Create Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" th:action="@{/accounts}" th:object="${account}">
+                        <div class="mb-3">
+                            <label for="accountNameCreate" class="form-label">Account Name</label>
+                            <input class="form-control" id="accountNameCreate" name="accountNameCreate" th:field="*{name}" type="text" placeholder="Account name"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary my-2">Create Account</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#createAccountModal">
+        <i class="fas fa-plus-circle"></i> Add Account
+    </button>
     <table class="table table-hover ">
         <thead class="thead-inverse">
         <tr>
