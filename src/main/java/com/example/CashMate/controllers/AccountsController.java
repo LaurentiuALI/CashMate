@@ -9,6 +9,7 @@ import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -37,13 +38,15 @@ public class AccountsController {
     }
 
     @RequestMapping({"/", ""})
-    public String accountList(Model model){
+    public String accountList(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "10") int size){
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
 
-        List<AccountDTO> accounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
+        Page<AccountDTO> accounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId(), page, size);
         for(AccountDTO account: accounts){
             account.setOwnerName(accountsService.getAccountOwner(account).getName());
         }

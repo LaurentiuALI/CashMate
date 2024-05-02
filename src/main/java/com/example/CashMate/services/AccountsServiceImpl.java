@@ -14,6 +14,10 @@ import com.example.CashMate.repositories.UserAccountRepository;
 import com.example.CashMate.repositories.security.CashUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -153,7 +157,6 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
 
-
     @Override
     public List<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID){
 
@@ -166,6 +169,28 @@ public class AccountsServiceImpl implements AccountsService{
         participantAccounts.sort((a1, a2) -> (int) (a1.getId() - a2.getId()));
 
         return participantAccounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Page<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID, int page, int size){
+
+        Optional<CashUser> user = cashUserRepository.findById(userID);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<Account> participantAccounts = userAccountRepository.findAccountsByUserId(userID);
+
+        user.ifPresent(cashUser -> participantAccounts.addAll(cashUser.getAccounts()));
+
+        participantAccounts.sort((a1, a2) -> (int) (a1.getId() - a2.getId()));
+
+        List<AccountDTO> accountDTOS = participantAccounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toList());
+
+        List<AccountDTO> accountDTOList = accountDTOS.subList(page * size, Math.min((page + 1) * size, accountDTOS.size()));
+
+
+        return new PageImpl<>(accountDTOList, pageable, accountDTOS.size());
     }
 
 

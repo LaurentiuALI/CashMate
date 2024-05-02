@@ -64,9 +64,6 @@
           <a class="nav-link" th:href="@{/transactions}"><i class="fas fa-exchange-alt"></i> List of Transactions</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{'/accounts/add'}"><i class="fas fa-plus-circle"></i> Add New Account</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addTransactionModal"><i class="fas fa-plus"></i> Add New Transaction</a>
         </li>
         <form id="nav-item" th:action="@{/logout}" method="post">
@@ -78,7 +75,6 @@
     </div>
   </div>
 </nav>
-</div>
 
 
 <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
