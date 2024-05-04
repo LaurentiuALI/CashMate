@@ -13,7 +13,6 @@
     <div class="col-md-6">
         <form class="card p-4 shadow-sm" method="post" th:action="@{/user}" th:object="${user}">
             <h2 class="text-center mb-4" style="color: #198754;">Register</h2>
-            <div th:if="${param.error}" class="alert alert-danger">Invalid user or password</div>
             <div class="mb-3">
                 <input class="form-control" th:field="*{name}" type="text" placeholder="Name" required autofocus>
             </div>
