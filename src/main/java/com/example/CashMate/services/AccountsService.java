@@ -2,6 +2,7 @@ package com.example.CashMate.services;
 
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ public interface AccountsService {
 
     Set<AccountDTO> getAllAccountsOwnedByUser(long userID);
     List<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID);
+    Page<AccountDTO> getAllAccountsOwnedAndParticipantByUser(long userID, int page, int size);
     CashUserDTO getAccountOwner(AccountDTO account);
     List<CashUserDTO> getAccountMembers(long accountID);
     AccountDTO getById(long accountID);
