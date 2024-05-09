@@ -42,9 +42,6 @@ public class AccountsServiceTest {
     private CashUserRepository cashUserRepository;
 
     @Mock
-    private TransactionRepository transactionRepository;
-
-    @Mock
     private ModelMapper modelMapper;
 
     @InjectMocks
