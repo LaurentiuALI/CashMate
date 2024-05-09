@@ -27,17 +27,9 @@ import static org.mockito.Mockito.when;
 public class TransactionServiceTest {
 
     @Mock
-    private UserGeneralChecks userGeneralChecks;
-    @Mock
-    private AccountGeneralChecks accountGeneralChecks;
-    @Mock
     private TransactionRepository transactionRepository;
     @Mock
     private TransactionCategoryRepository transactionCategoryRepository;
-    @Mock
-    private CategoryRepository categoryRepository;
-    @Mock
-    private RecursionRepository recursionRepository;
     @Mock
     private AccountRepository accountRepository;
 
