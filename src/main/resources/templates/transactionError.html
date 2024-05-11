@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #198754;
+      text-align: center;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    .error {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .field-name {
+      color: #198754;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Error Page</h1>
+  <p class="error">Validation errors occurred:</p>
+  <ul>
+    <li th:each="error : ${bindingResult.allErrors}">
+      <span class="error" th:text="${error.defaultMessage}"></span>
+    </li>
+  </ul>
+</div>
+</body>
+</html>

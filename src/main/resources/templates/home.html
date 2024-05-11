@@ -86,7 +86,7 @@
           <form th:action="@{/transactions/add}" th:object="${transaction}" method="POST">
             <div class="mb-3">
               <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control" id="name" name="name" required>
+              <input type="text" class="form-control" id="name" name="name">
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Description</label>
@@ -108,8 +108,7 @@
             <div class="mb-3">
               <label for="account" class="form-label">Account</label>
               <select class="form-select" id="account" name="account" required>
-                <!-- Populate with account options using Thymeleaf -->
-                <option th:each="account : ${accounts}" th:value="${account.id}" th:text="${account.name}"></option>
+                <option th:each="account : ${accounts}" th:value="${account.id}" th:text="${account.ownerName} + ' - ' + ${account.name}"></option>
               </select>
             </div>
             <div class="dropdown">
@@ -172,10 +171,10 @@
               <div class="badge" style="background-color: #66B9E3" th:text="${category.name}">Category</div>
           </div>
         </div>
+          <i class="fas fa-chevron-down mt-3 fs-2 text-white"></i>
       </div>
       <div class="collapse" th:id="'flush-collapse-' +${stat.index}" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-        <p class="card-text" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <a  th:href="@{'/transactions/delete/' + ${transaction.id}}" class=""><i class="color-element text-black fs-3 fa-solid fa-trash"></i></a>
+        <p class="card-text m-4 fs-4" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       </div>
   </div>
 

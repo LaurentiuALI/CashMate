@@ -21,37 +21,32 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class CashUserController {
 
-    AccountsService accountsService;
-    CashUserService cashUserService;
+    private final CashUserService cashUserService;
 
-    ModelMapper modelMapper;
-
-    public CashUserController(AccountsService accountsService, CashUserService cashUserService, ModelMapper modelMapper) {
-
-        this.accountsService = accountsService;
+    public CashUserController(CashUserService cashUserService) {
         this.cashUserService = cashUserService;
-        this.modelMapper = modelMapper;
-
+        log.info("CashUserController instantiated.");
     }
 
     @PostMapping({"/", ""})
     public String register(@Valid @ModelAttribute("user") CashUserDTO user, BindingResult bindingResult, Model model) {
-
+        log.info("Entering register method");
         if (bindingResult.hasErrors()) {
+            log.error("Error(s) occurred during user registration: {}", bindingResult.getAllErrors());
             model.addAttribute("user", user);
             return "register";
         }
         cashUserService.createAccount(user);
-
+        log.info("User registered successfully.");
         return "main";
     }
 
     @ExceptionHandler(CashUserNotFoundException.class)
     public ModelAndView handleCashUserAlreadyExists(CashUserNotFoundException exception) {
+        log.error("Cash user not found: {}", exception.getMessage());
         ModelAndView modelAndView = new ModelAndView("register");
         modelAndView.addObject("error", exception.getMessage());
         modelAndView.addObject("user", new CashUserDTO()); // Add an empty user object if needed
         return modelAndView;
     }
-
 }

@@ -21,6 +21,4 @@ public interface CashUserService {
     CashUserDTO createAccount(CashUserDTO cashUserDTO);
 
     List<CashUser> getAll();
-
-    CashUserDTO existsByName(String name);
 }

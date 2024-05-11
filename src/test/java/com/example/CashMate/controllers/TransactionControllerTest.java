@@ -27,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.*;
 
@@ -45,6 +46,9 @@ public class TransactionControllerTest {
     private TransactionsService transactionService;
     @Mock
     private CategoryService categoryService;
+
+    @Mock
+    private BindingResult bindingResult;
 
     @Mock
     private ModelMapper modelMapper;
@@ -153,7 +157,7 @@ public class TransactionControllerTest {
         when(accountsService.getById(1L)).thenReturn(new AccountDTO());
 
 
-        String viewName = transactionController.addTransaction("transactionName", "description", 100.0, Type.EXPENSE, 1L, new Date(), categories, mockModel);
+        String viewName = transactionController.addTransaction(transactionDTO, bindingResult, transactionDTO.getAccount_id(), categories, mockModel);
 
         assertEquals("redirect:/transactions?accountId=1&page=0&size=3", viewName);
         verify(cashUserService).getByName(loggedUser.getName());

@@ -1,10 +1,7 @@
 package com.example.CashMate.controllers;
 
-
-import com.example.CashMate.data.Account;
 import com.example.CashMate.data.Category;
 import com.example.CashMate.data.Transaction;
-import com.example.CashMate.data.Type;
 import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.CashUserDTO;
 import com.example.CashMate.dtos.TransactionDTO;
@@ -12,15 +9,17 @@ import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
 import com.example.CashMate.services.CategoryService;
 import com.example.CashMate.services.TransactionsService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -46,18 +45,22 @@ public class TransactionController {
         this.transactionsService = transactionsService;
         this.categoryService = categoryService;
         this.modelMapper = modelMapper;
+        log.info("TransactionController instantiated.");
     }
 
     @RequestMapping({"/", ""})
     public String accountList(Model model, @RequestParam(required = false, name = "accountId") Long accountId,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "3") int size){
+        log.info("Entering accountList method");
 
-
-        // Get the authenticated user and it's accounts for the dropdown
+        // Get the authenticated user and its accounts for the dropdown
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
         List<AccountDTO> allAccounts = accountsService.getAllAccountsOwnedAndParticipantByUser(loggedUser.getId());
+        for(AccountDTO account: allAccounts){
+            account.setOwnerName(accountsService.getAccountOwner(account).getName());
+        }
         model.addAttribute("accounts", allAccounts);
 
         // Get transactions for the accountId specified when selected from dropdown
@@ -76,18 +79,26 @@ public class TransactionController {
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("categoriesMap", categoriesMap);
 
+        log.info("Exiting accountList method");
         return "transactionList";
     }
 
     @PostMapping({"/add", "/add/"})
-    public String addTransaction(@RequestParam("name") String name,
-                                 @RequestParam("description") String description,
-                                 @RequestParam("amount") double amount,
-                                 @RequestParam("type") Type type,
+    public String addTransaction(@Valid @ModelAttribute("transaction") TransactionDTO transaction,
+                                 BindingResult bindingResult,
                                  @RequestParam("account") Long accountId,
-                                 @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
                                  @RequestParam(value = "categories", required = false) List<Long> selectedCategories,
                                  Model model) {
+        log.info("Entering addTransaction method");
+
+        if(selectedCategories.size() > 3){
+            bindingResult.addError(new ObjectError("Selected Categories", "Transactions must contain maximum 3 categories"));
+        }
+        if(bindingResult.hasErrors()){
+            model.addAttribute("bindingResult", bindingResult);
+            log.error("Validation errors occurred: {}", bindingResult.getAllErrors());
+            return "transactionError";
+        }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CashUserDTO loggedUser = cashUserService.getByName(auth.getName());
@@ -95,38 +106,40 @@ public class TransactionController {
         model.addAttribute("accounts", allAccounts);
         model.addAttribute("accountId", accountId);
 
-        Page<Transaction> transactions = transactionsService.findAllTransactions(0, 3, accountId);
+        Page<Transaction> transactions = transactionsService.findAllTransactions(0, 3,  accountId);
         model.addAttribute("transactions", transactions);
 
 
-        TransactionDTO transaction = new TransactionDTO();
+        TransactionDTO transactionPass = new TransactionDTO();
         AccountDTO usedAccount = accountsService.getById(accountId);
-        transaction.setAccount_id(usedAccount.getId());
-        transaction.setName(name);
-        transaction.setDescription(description);
-        transaction.setAmount(amount);
-        transaction.setType(type);
-        transaction.setDate(date);
+        transactionPass.setAccount_id(usedAccount.getId());
+        transactionPass.setName(transaction.getName());
+        transactionPass.setDescription(transaction.getDescription());
+        transactionPass.setAmount(transaction.getAmount());
+        transactionPass.setType(transaction.getType());
+        transactionPass.setDate(transaction.getDate());
 
         try {
-            TransactionDTO transactionDTO = transactionsService.createTransaction(transaction);
+            TransactionDTO transactionDTO = transactionsService.createTransaction(transactionPass);
             transactionsService.addCategoriesToTransaction(transactionDTO.getId(), selectedCategories);
         } catch (Exception e) {
+            log.error("An error occurred while adding transaction: {}", e.getMessage());
             e.printStackTrace();
         }
 
-
+        log.info("Exiting addTransaction method");
         return "redirect:/transactions?accountId=" + accountId + "&page=0&size=3";
     }
 
     @RequestMapping("/delete/{id}")
     public String RemoveAccount(@PathVariable long id) {
+        log.info("Entering RemoveAccount method");
         Optional<Transaction> transactionOptional = transactionsService.getTransactionsByID(id);
 
         transactionsService.removeTransaction(id);
         long accountId = transactionOptional.get().getAccount().getId();
 
+        log.info("Exiting RemoveAccount method");
         return "redirect:/transactions?accountId=" + accountId + "&page=0&size=3";
     }
-
 }

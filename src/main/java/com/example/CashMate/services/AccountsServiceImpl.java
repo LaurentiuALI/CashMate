@@ -9,7 +9,6 @@ import com.example.CashMate.dtos.CashUserDTO;
 import com.example.CashMate.exceptions.CashUserNotFoundException;
 import com.example.CashMate.exceptions.ResourceNotFoundException;
 import com.example.CashMate.repositories.AccountRepository;
-import com.example.CashMate.repositories.TransactionRepository;
 import com.example.CashMate.repositories.UserAccountRepository;
 import com.example.CashMate.repositories.security.CashUserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,81 +19,74 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class AccountsServiceImpl implements AccountsService{
 
-    AccountRepository accountRepository;
-    UserAccountRepository userAccountRepository;
-    CashUserRepository cashUserRepository;
-    TransactionRepository transactionRepository;
-
-    ModelMapper modelMapper;
-
+    private final AccountRepository accountRepository;
+    private final UserAccountRepository userAccountRepository;
+    private final CashUserRepository cashUserRepository;
+    private final ModelMapper modelMapper;
 
     public AccountsServiceImpl(AccountRepository accountRepository,
                                UserAccountRepository userAccountRepository,
                                CashUserRepository cashUserRepository,
-                               TransactionRepository transactionRepository,
                                ModelMapper modelMapper) {
         this.accountRepository = accountRepository;
         this.userAccountRepository = userAccountRepository;
         this.cashUserRepository = cashUserRepository;
-        this.transactionRepository = transactionRepository;
         this.modelMapper = modelMapper;
+        log.info("AccountsServiceImpl instantiated.");
     }
 
     @Override
     public AccountDTO updateAccount(AccountDTO accountDTO){
+        log.info("Updating account with id: {}", accountDTO.getId());
         Optional<Account> accountOpt = accountRepository.findById(accountDTO.getId());
-        log.info("Updating info for account with id " + accountDTO.getId());
 
         if(accountOpt.isPresent()){
-            accountOpt.get().setName(accountDTO.getName());
-            Account accountSaved = accountRepository.save(accountOpt.get());
-            return modelMapper.map(accountSaved, AccountDTO.class);
-        }else {
-                log.error("Cannot update account. Account with ID " + accountDTO.getId() + " was not found");
-                throw new ResourceNotFoundException("Account with ID " + accountDTO.getId() + " was not found");
+            Account account = accountOpt.get();
+            account.setName(accountDTO.getName());
+            Account updatedAccount = accountRepository.save(account);
+            return modelMapper.map(updatedAccount, AccountDTO.class);
+        } else {
+            log.error("Cannot update account. Account with ID {} was not found", accountDTO.getId());
+            throw new ResourceNotFoundException("Account with ID " + accountDTO.getId() + " was not found");
         }
     }
 
     @Override
     public AccountDTO createAccount(AccountDTO accountDTO){
-
-        try{
-            accountRepository.save(modelMapper.map(accountDTO,Account.class));
-        }catch(Exception e){
-            throw new CashUserNotFoundException(e.getMessage());
-        }
-
+        log.info("Creating account: {}", accountDTO);
+        Account account = modelMapper.map(accountDTO, Account.class);
+        accountRepository.save(account);
         return accountDTO;
     }
 
     @Override
     public List<CashUserDTO> getAccountMembers(long accountID) {
-        List <Long> userAccountIDs = userAccountRepository.findUserIDByAccountId(accountID);
-        List <CashUser> userAccounts = cashUserRepository.findAllById(userAccountIDs);
-        return userAccounts.stream().map(cashUser -> modelMapper.map(cashUser, CashUserDTO.class)).collect(Collectors.toList());
+        log.info("Fetching members for account ID: {}", accountID);
+        List<Long> userAccountIDs = userAccountRepository.findUserIDByAccountId(accountID);
+        List<CashUser> users = cashUserRepository.findAllById(userAccountIDs);
+        return users.stream()
+                .map(user -> modelMapper.map(user, CashUserDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public void addAccountMember(long accountID, long ownerID, String userName) {
-        log.info("adding member for AccountID" + accountID + "OwnerID" + ownerID + "UserID" + userName);
+        log.info("Adding member to account: accountID={}, ownerID={}, userName={}", accountID, ownerID, userName);
 
-        List<CashUser> userToAdd = cashUserRepository.findByName(userName);
+        List<CashUser> users = cashUserRepository.findByName(userName);
 
-        if(userToAdd.isEmpty())
+        if(users.isEmpty()) {
             throw new CashUserNotFoundException("Couldn't find user " + userName + " to associate!");
+        }
 
-        CashUser user = userToAdd.get(0);
-
+        CashUser user = users.get(0);
         UserAccountId userAccountId = new UserAccountId(accountID, user.getId());
         Optional<CashUser> cashUserOpt = cashUserRepository.findById(user.getId());
         Optional<Account> accountOpt = accountRepository.findById(accountID);
@@ -102,21 +94,22 @@ public class AccountsServiceImpl implements AccountsService{
         if(cashUserOpt.isPresent() && accountOpt.isPresent()){
             UserAccount userAccount = new UserAccount(userAccountId, cashUserOpt.get(), accountOpt.get());
             userAccountRepository.save(userAccount);
-            log.info("User " + userName + " added to account successfully");
-        }else{
+            log.info("User {} added to account successfully", userName);
+        } else {
             throw new CashUserNotFoundException("Couldn't find User to associate!");
         }
-
     }
 
     @Override
     public String removeAccountMember(long accountID, long ownerID, long userID) {
+        log.info("Removing member from account: accountID={}, ownerID={}, userID={}", accountID, ownerID, userID);
         userAccountRepository.deleteByAccountIdAndUserId(accountID, userID);
         return "User removed from account successfully";
     }
 
     @Override
     public String removeAccount(long accountID) {
+        log.info("Removing account with ID: {}", accountID);
         accountRepository.deleteById(accountID);
         return "Account removed successfully";
     }
@@ -192,6 +185,4 @@ public class AccountsServiceImpl implements AccountsService{
 
         return new PageImpl<>(accountDTOList, pageable, accountDTOS.size());
     }
-
-
 }

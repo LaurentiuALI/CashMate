@@ -3,8 +3,6 @@ package com.example.CashMate.services;
 import com.example.CashMate.data.*;
 import com.example.CashMate.dtos.TransactionDTO;
 import com.example.CashMate.repositories.*;
-import com.example.CashMate.util.AccountGeneralChecks;
-import com.example.CashMate.util.UserGeneralChecks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

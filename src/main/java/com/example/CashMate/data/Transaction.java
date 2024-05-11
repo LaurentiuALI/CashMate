@@ -2,6 +2,7 @@ package com.example.CashMate.data;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class Transaction {
     private Double amount;
 
     @Column(name = "date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     @Column(name = "type")

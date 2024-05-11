@@ -91,22 +91,5 @@ public class CashUserServiceImpl implements CashUserService{
         return cashUserDTO;
     }
 
-    @Transactional
-    public CashUser updateName(Long userId, String name){
-        CashUser updatedUser = entityManager.find(CashUser.class, userId);
-        updatedUser.setName(name);
-        entityManager.persist(updatedUser);
-        return updatedUser;
-    }
-
-    @Override
-    public CashUserDTO existsByName(String name){
-        CashUser user = cashUserRepository.findByName(name).get(0);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
-        return modelMapper.map(user, CashUserDTO.class);
-    }
-
 
 }

@@ -92,8 +92,8 @@
                 <form th:action="@{/transactions/add}" th:object="${transaction}" method="POST">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
+                        <input type="text" class="form-control" id="name" name="name">
+                        </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
@@ -153,40 +153,43 @@
 <div class="container">
 
     <div class="m-4">
-        <h2>Transactions</h2>
+        <h2 class="ms-4 me-4">Transactions</h2>
         <form method="get" th:action="@{/transactions}">
-            <div class="dropdown">
+            <div class="dropdown ms-4 me-4">
                 <button class="btn btn-secondary dropdown-toggle btn-success" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Select Account
                 </button>
                 <ul class="dropdown-menu">
                     <li th:each="account : ${accounts}">
-                        <button class="dropdown-item" type="submit" name="accountId" th:value="${account.id}" th:text="${account.name}" />
+                        <button class="dropdown-item" type="submit" name="accountId" th:value="${account.id}" th:text="${account.ownerName} + ' - ' + ${account.name}" />
                     </li>
                 </ul>
             </div>
         </form>
-        <div class="card mt-2" th:each="transaction : ${transactions}">
-            <div  th:class="${#strings.equals(transaction.type, 'EXPENSE')} ? 'bg-danger card-header d-flex justify-content-between align-items-center align-text-bottom' : 'bg-success card-header d-flex justify-content-between align-items-center'">
-                <div class="d-flex justify-content-center align-items-center">
-                    <i th:if="${#strings.equals(transaction.type, 'INCOME')}" class="fas fa-piggy-bank fs-2 text-white me-3"></i>
-                    <i th:if="${#strings.equals(transaction.type, 'EXPENSE')}" class="fas fa-shopping-cart fs-2 text-white me-3"></i>
-                    <p class="card-text transaction-currency text-white fs-2 mb-0 me-3" th:text="${transaction.type}">Currency: USD</p>
-                    <h5 class="card-title transaction-name text-white fs-2 mb-0 me-3" th:text="${transaction.name}">Transaction Name</h5>
-                </div>
+        <div class="card ms-4 me-4 mb-2" th:each="transaction, stat : ${transactions}" >
 
-                <p class="card-text transaction-amount text-white fs-2 mb-0 fw-semibold" th:text="${transaction.amount} + ' $'"><strong>$100.00 USD</strong></p>
-                <p class="card-text transaction-date text-white fs-2 mb-0 " th:text="${#dates.format(transaction.date, 'dd-MM-yyyy')}">Date: January 1, 2024</p>
-                <div class="category-container d-flex">
-                    <div th:each="category : ${categoriesMap[transaction.id]}">
-                        <div class="badge me-2" style="background-color: #66B9E3" th:text="${category.name}">Category</div>
+            <div th:class="${#strings.equals(transaction.type, 'EXPENSE')} ? 'card-header d-flex justify-content-around bg-danger' : 'card-header d-flex justify-content-around bg-success'"
+                 type="button" data-bs-toggle="collapse" th:attr="data-bs-target=${'#flush-collapse-' + stat.index}" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                <div class="col">
+                    <i th:if="${#strings.equals(transaction.type, 'INCOME')}" class="fas fa-piggy-bank fs-1 text-white me-5"></i>
+                    <i th:if="${#strings.equals(transaction.type, 'EXPENSE')}" class="fas fa-shopping-cart fs-1 text-white me-5"></i>
+                </div>
+                <div class="col-3">
+                    <h5 class="card-title transaction-name text-white fs-2 mb-0 " th:text="${transaction.name}">Transaction Name</h5>
+                    <p class="card-text transaction-date text-white fs-5 mb-0 card-subtitle " th:text="${#dates.format(transaction.date, 'EEE, dd MMM yyyy')}">Date: January 1, 2024</p>
+                </div>
+                <p class="card-text transaction-amount text-white fs-2 mt-2 mb-0 fw-semibold col" th:text="${transaction.amount} + ' $'"><strong>$100.00 USD</strong></p>
+                <div class="col">
+                    <div th:each="category : ${categoriesMap[transaction.id]}" class="d-flex mb-2 mt-2 justify-content-center">
+                        <div class="badge" style="background-color: #66B9E3" th:text="${category.name}">Category</div>
                     </div>
                 </div>
-                <td><a  th:href="@{'/transactions/delete/' + ${transaction.id}}"><i class="color-element text-white fs-3 fa-solid fa-trash"></i></a></td>
+                <i class="fas fa-chevron-down mt-3 fs-2 text-white"></i>
+                <a  th:href="@{'/transactions/delete/' + ${transaction.id}}"><i class="color-element text-white fs-2 mt-3 me-2 ms-3 fa-solid fa-trash"></i></a>
 
             </div>
-            <div class="card-body">
-                <p class="card-text transaction-description" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <div class="collapse" th:id="'flush-collapse-' +${stat.index}" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <p class="card-text m-4 fs-4" th:text="${transaction.description}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
             </div>
         </div>
 

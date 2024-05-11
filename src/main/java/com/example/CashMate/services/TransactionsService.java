@@ -21,15 +21,4 @@ public interface TransactionsService {
     void addCategoriesToTransaction(long transactionID, List<Long> categoriesID);
 
     void removeTransaction(long transactionID);
-
-    String UpdateTransaction(Transaction transaction, long userID);
-    String CreateRecursion(Recursion recursion, long userID);
-    String UpdateRecursion(Recursion recursion);
-    String RemoveRecursion(long userID, long accountID, long recursionID);
-    Transaction GetTransactionsByUserID(long userID);
-    Set<Transaction> getTransactionsByAccountID(long accountID);
-    List<Transaction> GetAllTransactions();
-    Category GetCategoryByID(long categoryID);
-    List<Category> GetAllCategories();
-    List<Recursion> GetRecursionsByAccountID(long accountID);
 }
