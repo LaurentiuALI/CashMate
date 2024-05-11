@@ -1,6 +1,7 @@
 package com.example.CashMate.services;
 
 import com.example.CashMate.data.*;
+import com.example.CashMate.dtos.AccountDTO;
 import com.example.CashMate.dtos.TransactionDTO;
 import com.example.CashMate.repositories.*;
 import com.example.CashMate.util.AccountGeneralChecks;
@@ -12,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +60,17 @@ public class TransactionsServiceImpl implements TransactionsService{
         Pageable pageable = PageRequest.of(page, size);
 
         return transactionRepository.findAllByAccount_Id(pageable, accountId);
+    }
+
+    @Override
+    public Page<Transaction> findAllTransactionSorted(int page, int size, List<AccountDTO> accounts, String field, String direction){
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(field).ascending() : Sort.by(field).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        List<Long> accountIds = accounts.stream().map(AccountDTO::getId).toList();
+
+        return transactionRepository.findAllForUser(accountIds, pageable);
     }
 
     @Override
