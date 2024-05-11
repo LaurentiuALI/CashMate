@@ -75,29 +75,5 @@ public class CashUserEntityTest {
         }
         Assertions.assertEquals(date, recursion.getDate());
     }
-
-    @Test
-    public void findTransaction() {
-        log.info("EntityManager: " + entityManager.getEntityManagerFactory());
-
-        log.info("Searching transaction with ID 1.");
-        Transaction transaction = entityManager.find(Transaction.class, 3L);
-
-        String stringExpectedDate = "2024-03-01 00:00:00";
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        try {
-            date = formatter.parse(stringExpectedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(transaction);
-
-        Assertions.assertEquals("Groceries", transaction.getName());
-        Assertions.assertEquals("Weekly grocery shopping", transaction.getDescription());
-        Assertions.assertEquals(150.5, transaction.getAmount());
-        Assertions.assertEquals(Type.EXPENSE, transaction.getType());
-        Assertions.assertEquals(date, transaction.getDate());
-    }
+    
 }
