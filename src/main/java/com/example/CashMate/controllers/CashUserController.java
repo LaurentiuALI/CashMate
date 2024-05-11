@@ -4,9 +4,12 @@ import com.example.CashMate.dtos.CashUserDTO;
 import com.example.CashMate.exceptions.CashUserNotFoundException;
 import com.example.CashMate.services.AccountsService;
 import com.example.CashMate.services.CashUserService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +35,12 @@ public class CashUserController {
     }
 
     @PostMapping({"/", ""})
-    public String register(@ModelAttribute CashUserDTO user) {
+    public String register(@Valid @ModelAttribute("user") CashUserDTO user, BindingResult bindingResult, Model model) {
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", user);
+            return "register";
+        }
         cashUserService.createAccount(user);
 
         return "main";

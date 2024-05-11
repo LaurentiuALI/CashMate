@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,10 @@ public class UserControllerTest {
 
     @Mock
     Model model;
+
+    @Mock
+    private BindingResult bindingResult;
+
 
     @Mock
     CashUserService cashUserService;
@@ -33,7 +38,7 @@ public class UserControllerTest {
 
         when(cashUserService.createAccount(newUserDTO)).thenReturn(newUserDTO);
 
-        String viewName = cashUserController.register(newUserDTO);
+        String viewName = cashUserController.register(newUserDTO, bindingResult, model);
 
         assertEquals(viewName, "main");
     }

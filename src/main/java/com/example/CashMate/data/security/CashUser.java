@@ -2,8 +2,8 @@ package com.example.CashMate.data.security;
 
 import com.example.CashMate.data.Account;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
 import java.util.*;
 
 @AllArgsConstructor
@@ -20,6 +20,7 @@ public class CashUser {
     private long id;
 
     @Column(name="name")
+    @NotBlank(message = "Name is mandatory." )
     private String name;
 
     @Column(name="password")
